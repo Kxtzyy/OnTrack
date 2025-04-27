@@ -28,6 +28,7 @@ export default function Profile() {
     setMessage('');                     // reset message
 
     if (isCreating) {
+
       if (!email || !username || !password) {
         setMessage('Please fill in all fields.');
         return;
@@ -98,7 +99,7 @@ export default function Profile() {
 
          {/* Modal box */}
          <SafeAreaView style={[commonStyles.container,{
-          height: isCreating ? 400:370,
+          height: isCreating ? 420:370,
           }]}>
 
            <MaterialCommunityIcons name="account" size={80} color={currentTheme.white} />
@@ -148,7 +149,10 @@ export default function Profile() {
              <Text style={commonStyles.blueText}>Forgot your password?</Text>
            </Pressable>
 
-           <Pressable onPress={() => setIsCreating(!isCreating)}>
+           <Pressable onPress={() => {
+            setIsCreating(!isCreating);
+            setMessage('');
+           }}>
              <Text style={commonStyles.blueText}>
                 {isCreating ? 'Already have an account? Log In' : 'Don\'t have an account? Create one'}
              </Text>

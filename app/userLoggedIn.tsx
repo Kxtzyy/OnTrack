@@ -25,7 +25,7 @@ export default function Profile() {
     <View style={commonStyles.overlay}>
       <Text style={commonStyles.header}>Profile</Text>
 
-      <SafeAreaView style={[commonStyles.container,{paddingVertical: 500 as const,}]}>
+      <SafeAreaView style={[commonStyles.container,{paddingVertical: 45 as const,}]}>
         {/* Display user information if logged in */}
         {user ? (
           <>

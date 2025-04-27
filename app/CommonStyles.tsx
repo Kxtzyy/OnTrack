@@ -25,10 +25,11 @@ export const CommonStyles = () => {
       },
   
       container: {
+        height: 340,
         width: width*0.85,
         backgroundColor: currentTheme["101010"],
         paddingHorizontal: 20,
-        paddingVertical: 10,
+        paddingVertical: 50,
         borderRadius: 15, 
         borderWidth: 1,
         borderColor: currentTheme.dimgray,

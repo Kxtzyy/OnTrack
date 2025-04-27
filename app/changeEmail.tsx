@@ -48,7 +48,7 @@ export default function ChangePasswordScreen() {
         }
     }
     
-    alert('Password changed successfully!');
+    alert('E-mail changed successfully!');
     router.back();
   };
 
@@ -67,18 +67,16 @@ export default function ChangePasswordScreen() {
 
       <TextInput
         style={styles.input}
-        placeholder="Enter new password"
+        placeholder="Enter new E-Mail"
         placeholderTextColor="#aaa"
-        secureTextEntry
         value={newEmail}
         onChangeText={setNewEmail}
       />
 
       <TextInput
         style={styles.input}
-        placeholder="Confirm new password"
+        placeholder="Confirm new E-Mail"
         placeholderTextColor="#aaa"
-        secureTextEntry
         value={comfirmEmail}
         onChangeText={setcomfirmEmail}
       />

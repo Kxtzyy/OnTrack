@@ -18,7 +18,7 @@ export default function AccountSettings() {
   };
 
   const handleChangeEmail = () => {
-    console.log("Navigate to Change Email screen");
+    router.push('/changeEmail');
     // Add navigation or logic for changing email
   };
 

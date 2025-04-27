@@ -97,7 +97,7 @@ export default function Profile() {
          <Text style={commonStyles.header}>Profile</Text>
 
          {/* Modal box */}
-         <SafeAreaView style={[commonStyles.container,{paddingVertical: 500 as const,}]}>
+         <SafeAreaView style={[commonStyles.container,{paddingVertical: 45 as const,}]}>
 
            <MaterialCommunityIcons name="account" size={80} color={currentTheme.white} />
            

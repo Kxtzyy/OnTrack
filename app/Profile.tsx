@@ -7,6 +7,8 @@ import Index from './(tabs)';
 // import bcrypt from 'bcryptjs';
 import { supabase } from '../storage/supabase';
 import { useAuth } from './LoginContext';
+import { CommonStyles } from './CommonStyles'; 
+
 
 const width = Dimensions.get('window').width-1
 
@@ -20,6 +22,7 @@ export default function Profile() {
   const [message, setMessage] = useState('');             // to send error or success messages  
   const { login } = useAuth();
   const { user } = useAuth();
+  const commonStyles = CommonStyles();
 
   const handleLogin = async () => {     // async so 'await' works
     setMessage('');                     // reset message
@@ -87,106 +90,20 @@ export default function Profile() {
     }
   };
 
-const styles = StyleSheet.create({
-    overlay: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-      backgroundColor: currentTheme["rgba(0, 0, 0, 0.8)"], // Use theme background color
-      position: "absolute",
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
-    },
-
-    container: {
-      width: width*0.85,
-      backgroundColor: currentTheme["101010"], // Use theme background color
-      paddingHorizontal: 20,
-      paddingVertical: 10,
-      borderRadius: 15, 
-      borderWidth: 1,
-      borderColor: currentTheme.dimgray,
-      alignItems: "center",
-      justifyContent: 'center',
-      //justifyContent: "flex-start",
-    },
-
-    header: {
-      fontSize: 18,
-      color: currentTheme.white,
-      fontWeight: 'bold',
-      textAlign: 'center',
-      marginBottom: 10, 
-    },
-
-    input: {
-      width: '82%',
-      padding: 12,
-      marginTop: 14,
-      borderWidth: 1,
-      borderRadius: 5,
-      borderColor: currentTheme.dimgray,
-      color: currentTheme.white,
-    },
-  
-    toggleText: {
-      color: currentTheme.lightblue,
-      marginTop: 5,
-      marginBottom: 5,
-    },
-  
-    exitButton: {
-      marginTop: 20,
-      backgroundColor: currentTheme["101010"],
-      paddingVertical: 12,
-      paddingHorizontal: 30,
-      borderRadius: 25,
-      borderWidth: 1,
-      borderColor: currentTheme.dimgray,
-    },
-  
-    exitButtonText: {
-      fontSize: 18,
-      color: currentTheme.white,
-      fontWeight: 'bold',
-    },
-
-    profileIcon: {
-      width: 100,
-      height: 100,
-      borderRadius: 50, 
-      marginBottom: 10,
-      marginTop: 10,
-    },
-});
-
   return (
-     <View style={styles.overlay}>
+     <View style={commonStyles.overlay}>
        
          {/* Header above modal */}
-         <Text style={styles.header}>Profile</Text>
-
-         {/*To show if logged in */}
-         {user && (
-           <Text style={{ color: currentTheme.lightblue, marginBottom: 10 }}>
-             Logged in as: {user.username}
-           </Text>
-         )}
+         <Text style={commonStyles.header}>Profile</Text>
 
          {/* Modal box */}
-         <SafeAreaView style={[
-          styles.container,
-          {paddingVertical: 500 as const,
-          }
-          ]}>
+         <SafeAreaView style={[commonStyles.container,{paddingVertical: 45 as const,}]}>
 
            <MaterialCommunityIcons name="account" size={80} color={currentTheme.white} />
            
            {isCreating && (
              <TextInput
-               style={styles.input}
+               style={commonStyles.input}
                placeholder="Username"
                placeholderTextColor={currentTheme.gray}
                value={username}
@@ -195,7 +112,7 @@ const styles = StyleSheet.create({
            )}
 
            <TextInput
-             style={styles.input}
+             style={commonStyles.input}
              placeholder="Email"
              placeholderTextColor={currentTheme.gray}
              value={email}
@@ -205,7 +122,7 @@ const styles = StyleSheet.create({
            />
 
            <TextInput
-             style={styles.input}
+             style={commonStyles.input}
              placeholder="Password"
              placeholderTextColor={currentTheme.gray}
              value={password}
@@ -219,26 +136,26 @@ const styles = StyleSheet.create({
               </Text>
            )}
 
-           <Pressable onPress={handleLogin} style={styles.exitButton}>
-             <Text style={styles.exitButtonText}>
+           <Pressable onPress={handleLogin} style={commonStyles.button}>
+             <Text style={commonStyles.buttonText}>
                {isCreating ? 'Create Account' : 'Log In'}
              </Text>
            </Pressable>
 
-           <Pressable onPress={() => alert('Forgot Password button pressed')} style={styles.toggleText}>
-             <Text style={styles.toggleText}>Forgot your password?</Text>
+           <Pressable onPress={() => router.push('/ForgotPassword')}>
+             <Text style={commonStyles.blueText}>Forgot your password?</Text>
            </Pressable>
 
            <Pressable onPress={() => setIsCreating(!isCreating)}>
-             <Text style={styles.toggleText}>
+             <Text style={commonStyles.blueText}>
                 {isCreating ? 'Already have an account? Log In' : 'Don\'t have an account? Create one'}
              </Text>
            </Pressable>
          </SafeAreaView>
 
          {/* Exit button below modal */}
-         <Pressable onPress={() => router.back()} style={styles.exitButton}>
-            <Text style={styles.exitButtonText}>Exit</Text>
+         <Pressable onPress={() => router.back()} style={commonStyles.button}>
+            <Text style={commonStyles.buttonText}>Exit</Text>
          </Pressable>
      </View>
   );

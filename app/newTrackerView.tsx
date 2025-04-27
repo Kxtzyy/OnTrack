@@ -10,6 +10,7 @@ import { useTheme } from './ThemeContext';
 import { openDatabase } from '@/storage/sqlite';
 import { useTrackerStore } from '@/storage/store';
 import { Tracker, TimePeriod } from '@/types/Tracker';
+import { CommonStyles } from './CommonStyles';
 
 import { Alert } from 'react-native';
 
@@ -32,6 +33,7 @@ export default function newTrackerView() {
   const router = useRouter();
   const { image, color } = useLocalSearchParams(); // receives updated params from selectImage
   const { currentTheme } = useTheme(); // Get the current theme from context
+  const commonStyles = CommonStyles();
 
   const addTracker = useTrackerStore((s) => s.addTracker);
 

@@ -32,9 +32,9 @@ export default function Profile() {
         {/* Display user information if logged in */}
         {user ? (
           <>
-            <Text style={commonStyles.blueText}>Logged in as: {user.username}</Text>
             {/* Always show the default profile icon */}
             <MaterialCommunityIcons name="account" size={80} color={currentTheme.white} />
+            <Text style={commonStyles.blueText}>Logged in as: {user.username}</Text>
           </>
         ) : (
           <Text style={{ color: currentTheme.lightblue }}>You are not logged in.</Text>

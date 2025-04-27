@@ -85,259 +85,6 @@ export default function newTrackerView() {
       { label: "Heart Rate (BPM)", value: "bpm" },
     ]);
 
-    const styles = StyleSheet.create({
-      // Text above popup
-      overlayText: {
-        fontSize: 18,
-        color: currentTheme.white,
-        fontWeight: 'bold',
-        textAlign: 'center',
-        paddingBottom: 10,
-      },
-    
-      // Overlay itself
-      overlay: {
-        flex: 1,
-        backgroundColor: currentTheme["rgba(0, 0, 0, 0.8)"], // 0.8 opacity of darkness
-        justifyContent: "center",
-    
-        // Stretch to fill center
-        alignItems: "center",
-        position: "absolute",
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-      },
-    
-      // Content inside overlay (background, size etc)
-      container: {
-        height: 410,
-        width: width*0.85,
-        backgroundColor: currentTheme["101010"],
-        paddingHorizontal: 20,
-        borderRadius: 15, // Rounded edges
-        borderWidth: 1,
-        borderColor: currentTheme.dimgray,
-        alignItems: "center",
-      },
-    
-      // Contains input fields
-      inputContainer: {
-        width: width*0.85*0.8,
-        backgroundColor: currentTheme["101010"],
-        borderColor: currentTheme.dimgray,
-        marginBottom: 5,
-        borderRadius: 5,
-        borderWidth: 1,
-        
-        alignSelf: 'center',
-      },
-      // All input fields
-      input: {
-        height: 50,
-        color: currentTheme["FFFFFF"],
-        textAlign: "center",
-        fontSize: 20,
-      },
-    
-      // Dropdown styling
-      dropdownContainer: {
-        width: width*0.8*0.85,
-        marginBottom: 10,
-        borderRadius: 5,
-        borderWidth: 1,
-        borderColor: currentTheme.dimgray,
-        zIndex: 1000, 
-        alignSelf: 'center',
-        alignContent: 'center',
-      },
-      dropdown: {
-        backgroundColor: currentTheme["101010"],
-        borderColor: 'transparent',
-      },
-      dropdownList: {
-        backgroundColor: currentTheme["101010"],
-        borderColor: currentTheme.dimgray,
-      },
-      dropdownText: {
-        color: currentTheme.white,
-        textAlign: 'center',
-        fontSize: 20,
-      },
-    
-      tickContainerStyle: {
-        marginLeft: -15,
-      },
-      arrowContainerStyle: {
-        marginLeft: -15,
-      },
-      dropdownArrow: {
-        width: 5*scale, //should probably adjust as no longer using screen size based rendering
-        height: 5*scale,
-        tintColor: currentTheme.white, //white arrow
-      },
-      dropdownTick: {
-        width: 5*scale,
-        height: 5*scale,
-        tintColor: currentTheme.white, //white tick
-      },
-    
-      //Contains buttons (important for row display)
-      buttonsContainer: {
-        height: 50,
-        width: width * 0.85 * 0.8,
-        flexDirection: 'row',
-      },
-      timePeriodButton: {
-        height: '100%',
-        flex: 1,
-        backgroundColor: currentTheme.black,
-        borderRadius: 5,
-        borderWidth: 2,
-        borderColor: currentTheme.dimgray,
-    
-        alignItems: 'center',
-        justifyContent: 'center',
-      },
-      goalLimitButton: {
-        flex: 1,
-        height: '100%',
-    
-        justifyContent: "center",
-        alignItems: "center",
-        backgroundColor: currentTheme.black,
-    
-        borderRadius: 5,
-        borderWidth: 2,
-        borderColor: currentTheme.dimgray,
-    
-        fontSize: 20,
-        fontWeight: "bold",
-        color: currentTheme["FFFFFF"],
-      },
-    
-      // Color of goalLimit button dependent on {goal or limit}
-      goalButton: {
-        backgroundColor: "#06402B",
-      },
-      limitButton: {
-        backgroundColor: "#950606",
-      },
-    
-      //Text if goal or limit {otherwise buttonText}
-      goalLimitText: {
-        fontSize: 20,
-        fontWeight: "bold",
-        color: currentTheme["FFFFFF"],
-      },
-      buttonText:{
-        fontSize: 20,
-        color: "dimgray" //dull display
-      },
-    
-      // Exit Button (below the modal)
-      exitButton: {
-        marginTop: 20, // Adds some space above the button
-        backgroundColor: currentTheme["101010"],
-        paddingVertical: 12,
-        paddingHorizontal: 30,
-        borderRadius: 25,
-        borderWidth: 1,
-        borderColor: currentTheme.dimgray,
-      },
-      exitButtonText: {
-        fontSize: 18,
-        color: currentTheme.white,
-        fontWeight: 'bold',
-      },
-    
-      exitButtonInvisible: {
-        marginTop: 20, // Adds some space above the button
-        backgroundColor: '#transparent',
-        paddingVertical: 12,
-        paddingHorizontal: 30,
-        borderRadius: 25,
-        borderWidth: 1,
-        borderColor: 'transparent',
-      },
-      exitButtonTextInvisible:{
-        fontSize: 18,
-        color: 'transparent',
-        fontWeight: 'bold',
-      },
-      
-    
-      
-    });
-
-
-    //Cross, Icon box and tick (used in select image)
-   const imageBoxStyles = StyleSheet.create({
-  //For image cancellation, image and confirm tracker buttons
-  imageButtonsContainer: {
-    height: 100,
-    width: 220,
-    marginVertical: 30,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignContent: 'center',
-    borderColor: currentTheme.white,
-    position: 'relative',
-  },
-
-  tickButton: {
-    position: 'absolute',
-    right: 0,
-
-    width: 60,
-    height: '100%',
-    borderRadius: 10,
-    borderTopLeftRadius: 0,
-    borderBottomLeftRadius: 0,
-    borderWidth: 1,
-    borderColor: currentTheme.dimgray,
-    borderRightColor: 'transparent',
-    borderTopColor: '#101010',
-    borderBottomColor: '#094F23',
-    borderBottomWidth: 7,
-
-    backgroundColor: '#075F28',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  crossButton: {
-    position: 'absolute',
-    left: 0,
-    width: 60,
-    height: '100%',
-
-    borderRadius: 10,
-    borderTopRightRadius: 0,
-    borderBottomRightRadius: 0,
-    borderWidth: 1,
-    borderColor: currentTheme.dimgray,
-    borderTopColor: '#101010',
-    borderBottomColor: '#860B0B', 
-    borderBottomWidth: 7,
-    borderLeftColor: 'transparent',
-
-    backgroundColor: '#a30a0a',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  icon: {
-    width: 100,
-    height: '100%',
-    borderColor: currentTheme.dimgray,
-    borderWidth: 1,
-    justifyContent: 'center',
-    alignContent: 'center',
-
-    alignItems: 'center',
-  },
-})
-
 
     /*Functions*/
    // When return from child, update state if image param is present
@@ -399,18 +146,18 @@ export default function newTrackerView() {
   
   //View itself
   return (
-    <View style={styles.overlay}>
+    <View style={commonStyles.overlay}>
 
       {/* Text Above Popup */}
-      <Text style={styles.overlayText}>Create Tracker</Text>
+      <Text style={commonStyles.header}>Create Tracker</Text>
       
-      <SafeAreaView style={styles.container}>
-        <View style = {imageBoxStyles.imageButtonsContainer}>
+      <SafeAreaView style={commonStyles.trackerViewContainer}>
+        <View style = {commonStyles.imageButtonsContainer}>
 
         {/* Left cross button (render if image)*/}
         {selectedImage != "" && (
         <Pressable
-          style={imageBoxStyles.crossButton}
+          style={commonStyles.crossButton}
           onPress={() => setSelectedImage("")}
         >
           <Ionicons name="close" size={24} color="white" />
@@ -419,7 +166,7 @@ export default function newTrackerView() {
 
         {/* Tracker Icon Option */}
         <Pressable 
-          style = {imageBoxStyles.icon}
+          style = {commonStyles.icon}
           onLayout={(event) => {
             const { height, } = event.nativeEvent.layout;
             setIconSize(height * 0.7);
@@ -449,7 +196,7 @@ export default function newTrackerView() {
 
         {/* Right tick button */}
         {title.length > 2 && (
-            <Pressable style={imageBoxStyles.tickButton} onPress={handleConfirm}>
+            <Pressable style={commonStyles.tickButton} onPress={handleConfirm}>
               <Ionicons name="checkmark" size={24} color="white" />
             </Pressable>
           )}
@@ -457,9 +204,9 @@ export default function newTrackerView() {
 
 
         {/* Tracker Title */}
-        <View style={styles.inputContainer}>
+        <View style={commonStyles.inputContainer}>
           <TextInput
-            style={styles.input}
+            style={commonStyles.trackerViewInput}
             placeholder="Title(*)"
             placeholderTextColor="#aaa"
             maxLength={25} //titles should be brief
@@ -471,9 +218,9 @@ export default function newTrackerView() {
         </View>
 
         {/* Limit/Goal of Tracker (OPTIONAL) */}
-        <View style={styles.inputContainer}>
+        <View style={commonStyles.inputContainer}>
         <TextInput
-          style={[styles.input, {color: isGoal ? "#06402B" : "#950606"}]} //if goal text red otherwise green
+          style={[commonStyles.trackerViewInput, {color: isGoal ? "#06402B" : "#950606"}]} //if goal text red otherwise green
           
           placeholder = {isGoal ? "Goal" : "Limit"}
           placeholderTextColor="#aaa"
@@ -495,7 +242,7 @@ export default function newTrackerView() {
 
       
         {/* Unit Dropdown <bugged for android> (OPTIONAL) */}
-        <View style={styles.dropdownContainer}>
+        <View style={commonStyles.dropdownContainer}>
           <DropDownPicker
             open={open}
             value={value}
@@ -507,21 +254,21 @@ export default function newTrackerView() {
             autoScroll = {true}
             placeholder="Set Unit"
             placeholderStyle={{color: '#aaa'}}
-            style={styles.dropdown}
-            dropDownContainerStyle={styles.dropdownList}
-            textStyle={styles.dropdownText}
-            arrowIconContainerStyle = {styles.arrowContainerStyle}
-            tickIconContainerStyle = {styles.tickContainerStyle}
-            arrowIconStyle = {styles.dropdownArrow}
-            tickIconStyle = {styles.dropdownTick}
+            style={commonStyles.dropdown}
+            dropDownContainerStyle={commonStyles.dropdownList}
+            textStyle={commonStyles.buttonText}                           //if proportions wrong add dropdown text to common styles
+            arrowIconContainerStyle = {commonStyles.arrowContainerStyle}
+            tickIconContainerStyle = {commonStyles.tickContainerStyle}
+            arrowIconStyle = {commonStyles.dropdownArrow}
+            tickIconStyle = {commonStyles.dropdownTick}
           />
         </View>
       {/*View with time period + goal/limit buttons in*/}
-      <View style = {styles.buttonsContainer}>
+      <View style = {commonStyles.buttonsContainer}>
 
       {/* Time period pressable (cycles through time periods) */}
         <Pressable
-          style = {styles.timePeriodButton}
+          style = {commonStyles.timePeriodButton}
           onPress={() => (setCurrentTPIndex((currentTPIndex + 1) % timePeriods.length))}
         >
           <Text style = {{
@@ -536,16 +283,16 @@ export default function newTrackerView() {
         {/* Button to toggle between Goal and Limit */}
         <Pressable
           style={[
-            styles.goalLimitButton,
+            commonStyles.goalLimitButton,
             limit.length > 0 
-            ? (isGoal ? styles.goalButton : styles.limitButton) //if {goal} then goal style else limit style
+            ? (isGoal ? commonStyles.goalButton : commonStyles.limitButton) //if {goal} then goal style else limit style
             : null, 
           ]}
           onPress={
             toggleGoalButton
           }
         >
-          <Text style={limit.length > 0 ? styles.goalLimitText : styles.buttonText}> 
+          <Text style={limit.length > 0 ? commonStyles.goalLimitText : commonStyles.dimgrayText}> 
             {isGoal ? 'Goal' : 'Limit'}
           </Text>
         </Pressable>
@@ -555,9 +302,9 @@ export default function newTrackerView() {
       {/* Exit Button (placed below the content) */}
       <Pressable
        onPress={() => {open ? null : router.back()}}
-       style={open ? styles.exitButtonInvisible : styles.exitButton} //if dropdown open invisible
+       style={open ? commonStyles.exitButtonInvisible : commonStyles.button} //if dropdown open invisible
       >
-        <Text style={open ? styles.exitButtonTextInvisible : styles.exitButtonText}>
+        <Text style={open ? commonStyles.exitButtonTextInvisible : commonStyles.buttonText}>
           Exit
         </Text>
       </Pressable>

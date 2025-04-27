@@ -1,5 +1,5 @@
 import { openDatabase } from "@/storage/sqlite";
-import { exampleTrackers, TimePeriod, Tracker } from "@/types/Tracker";
+import {TimePeriod, Tracker } from "@/types/Tracker";
 import { Section } from "@/types/Section";
 import { useSectionStore, useTrackerStore } from "@/storage/store";
 import { SQLiteDatabase } from "expo-sqlite";

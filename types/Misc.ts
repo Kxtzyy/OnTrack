@@ -1,8 +1,3 @@
-//File contains miscellanious methods
-
-//Time 
-export const getCurrentUnixMilliseconds = (): number => Date.now();
-
 //get icon info {type,name,color}
 export const getIconInfo = (input: string): { type: string; name: string; color: string } => {
     var type : string = "fa5";

@@ -69,11 +69,10 @@ export default function ForgotPassword() {
         <Pressable onPress={passwordReset} style={commonStyles.button}>
           <Text style={commonStyles.buttonText}>Get Password</Text>
         </Pressable>
-
-        <Pressable onPress={() => router.back()} style={commonStyles.button}>
-          <Text style={commonStyles.buttonText}>Exit</Text>
-        </Pressable>
       </SafeAreaView>
+      <Pressable onPress={() => router.back()} style={commonStyles.button}>
+        <Text style={commonStyles.buttonText}>Exit</Text>
+      </Pressable>
     </View>
   );
 }

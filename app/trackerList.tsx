@@ -3,7 +3,7 @@ import { Pressable, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useTheme } from "./ThemeContext";
 import { useTrackerStore } from "@/storage/store";
-import { Tracker, exampleTrackers } from "@/types/Tracker";
+import { Tracker } from "@/types/Tracker";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { Text } from "react-native";
 import React, { useState, useEffect } from "react";

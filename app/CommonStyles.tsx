@@ -63,6 +63,7 @@ export const CommonStyles = () => {
     
       button: {
         marginTop: 20,
+        marginBottom: 20,
         backgroundColor: currentTheme["101010"],
         paddingVertical: 12,
         paddingHorizontal: 30,

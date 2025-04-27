@@ -73,7 +73,7 @@ export const CommonStyles = () => {
       },
     
       buttonText: {
-        fontSize: 18,
+        fontSize: 18,             //dropdownText wants 20
         color: currentTheme.white,
         fontWeight: 'bold',
       },
@@ -89,6 +89,19 @@ export const CommonStyles = () => {
       // newTrackerView styles:        // ****** HAVEN'T BEEN PUT IN YET ******  (hard to do without messing up proportions)
 
       // Contains input fields
+
+          // Content inside overlay (background, size etc)
+          trackerViewContainer: {
+            height: 410,
+            width: width*0.85,
+            backgroundColor: currentTheme["101010"],
+            paddingHorizontal: 20,
+            borderRadius: 15, // Rounded edges
+            borderWidth: 1,
+            borderColor: currentTheme.dimgray,
+            alignItems: "center",
+          },
+
       inputContainer: {
         width: width*0.85*0.8,
         backgroundColor: currentTheme["101010"],
@@ -98,6 +111,14 @@ export const CommonStyles = () => {
         borderWidth: 1,
         
         alignSelf: 'center',
+      },
+
+      // All input fields
+      trackerViewInput: {
+        height: 50,
+        color: currentTheme["FFFFFF"],
+        textAlign: "center",
+        fontSize: 20,
       },
           
             // Dropdown styling

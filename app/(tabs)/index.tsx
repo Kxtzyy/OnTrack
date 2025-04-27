@@ -907,80 +907,82 @@ export default function Index() {
         </Pressable>
 
         {/* Modal for the popup */}
-        <Modal
-          visible={isModalVisible}
-          animationType="slide"
-          transparent={true}
-          onRequestClose={handleCloseModal}
-        >
-          <View style={[styles.modalOverlay, { backgroundColor: currentTheme["rgba(0, 0, 0, 0.8)"] }]}>
-            <View
-              style={[styles.modalContent, { 
-                backgroundColor: currentTheme["101010"],
-                borderColor: currentTheme['dimgray'],
-              }    
-            ]}
-            >
-              {/* Close button */}
-              <Pressable
-                onPress={handleCloseModal}
-                style={styles.closeButton}
-              >
-                <AntDesign name="close" size={24} color={currentTheme.white} />
-              </Pressable>
+    <Modal
+        visible={isModalVisible}
+        animationType="slide"
+        transparent={true}
+        onRequestClose={handleCloseModal}>
+  
+      <View style={[styles.modalOverlay, { backgroundColor: currentTheme["rgba(0, 0, 0, 0.8)"] }]}>
+        <View style={[styles.modalContent, { backgroundColor: currentTheme["101010"], borderColor: currentTheme['dimgray'] }]}>
+          <Pressable onPress={handleCloseModal} style={styles.closeButton}>
+            <AntDesign name="close" size={24} color={currentTheme.white} />
+          </Pressable>
 
-              {/* Scrollable content */}
-              <ScrollView
-                style={styles.scrollView2} // Use for non-layout styles like width, height, etc.
-                contentContainerStyle={{
-                  flexDirection: "row", // Arrange items in rows
-                  flexWrap: "wrap", // Allow wrapping to the next row
-                  justifyContent: "center", // Center items horizontally
-                  paddingBottom: 50, // Add padding if needed
-                }}
-                showsVerticalScrollIndicator={false}
-              >
-                {trackers
-                  .filter((tracker) => tracker.timePeriod === selected) // Filter trackers by selected time period
-                  .map((tracker) => (
-                  <TouchableOpacity
-                    key={tracker.trackerName + tracker.timePeriod}
-                    onPress={() => {
-                      if (!targetSection) return;
-                      const exists = targetSection.trackers.some(
-                        (t) => t.trackerName === tracker.trackerName && t.timePeriod === tracker.timePeriod
-                      );
-                      if (exists) {
-                        handleCloseModal();
-                        return;
-                      }else{
-                        addTrackerToSection(
-                          targetSection.sectionTitle,
-                          targetSection.timePeriod,
-                          tracker
-                      );
-                      handleCloseModal();
-                      }
-                    }}
-                    style={[
-                      styles.trackerButton,
-                      {
-                        borderWidth: 1,
-                        borderColor: 'white',
-                        backgroundColor: currentTheme["101010"],
-                      },
-                    ]}
-                  >
-                    <View style={styles.iconContainer}>
-                      {getImage(tracker, 40).icon}
-                    </View>
-                    <Text style={[styles.trackerText, { color: currentTheme.white }]}>{tracker.trackerName}</Text>
-                  </TouchableOpacity>
-                ))}
-              </ScrollView>
-            </View>
-          </View>
-        </Modal>
+          <ScrollView
+            style={styles.scrollView2}
+            contentContainerStyle={{
+              flexDirection: "row",
+              flexWrap: "wrap",
+              justifyContent: "center",
+              paddingBottom: 50,
+            }}
+            showsVerticalScrollIndicator={false}
+          >
+            {trackers
+              .filter((tracker) => tracker.timePeriod === selected)
+              .map((tracker) => (
+            <TouchableOpacity
+            onPress={() => {
+              if (!targetSection) return;
+              const exists = targetSection.trackers.some(
+                (t) => t.trackerName === tracker.trackerName && t.timePeriod === tracker.timePeriod
+              );
+              if (exists) {
+                handleCloseModal();
+                return;
+              }else{
+                addTrackerToSection(
+                  targetSection.sectionTitle,
+                  targetSection.timePeriod,
+                  tracker
+              );
+              handleCloseModal();
+              }}
+            }
+              
+            key = {tracker.trackerName}
+            style = {[
+                styles.trackerButton,
+                {borderColor: 'transparent'}, 
+            ]}>
+                {/*icon*/}
+                <View style = {[styles.iconContainer]}>
+                    {getImage(tracker,40).icon}
+                </View>
+                
+                {/*text {trackername}*/}
+                <Text style={[
+                    styles.trackerText,
+                    {color: currentTheme['white']}
+                ]}>
+                    {tracker.trackerName}
+                </Text>
+
+                <View style = {[
+                styles.iconContainer,
+                {
+                    marginLeft: 'auto', 
+                }
+            ]}>
+                          <Entypo name="plus" size={25} color={currentTheme['dimgray']} />
+              </View>
+          </TouchableOpacity>
+              ))}
+          </ScrollView>
+        </View>
+      </View>
+    </Modal>
         <NewSectionModal
           visible={sectionModalOpen}
           onClose={() => setSectionModalOpen(false)}
@@ -1090,25 +1092,26 @@ const styles = StyleSheet.create({
   },
 
   trackerButton: {
-    width: "21%", // Adjust to fit 4 items per row
-    aspectRatio: 1, // Make it square
-    margin: 10, // Add spacing between buttons
-    justifyContent: "center",
+    height: 40,
+    width: '100%',
+    margin: 10,
+    justifyContent: "space-between",
     alignItems: "center",
-       borderRadius: 10, // Rounded corners
+    flexDirection: 'row',
   },
 
   iconContainer: {
     justifyContent: "center",
     alignItems: "center",
-    marginBottom: 5, // Space between icon and text
+    height: 40,
+    width: 40,
   },
 
   trackerText: {
-    fontSize: 14, // Smaller font size for labels
+    fontSize: 14,
     fontWeight: "500",
-    
-    textAlign: "center", // Center-align text
+    marginLeft: 10,
+    flex:1
   },
 });
 

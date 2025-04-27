@@ -25,8 +25,7 @@ export const CommonStyles = () => {
       },
   
       container: {
-        height: 340,
-        width: width*0.85,
+        width: width*0.85,                             // if you add height: it breaks messes up proportions
         backgroundColor: currentTheme["101010"],
         paddingHorizontal: 20,
         paddingVertical: 50,

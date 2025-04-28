@@ -4,6 +4,7 @@ import { useRouter } from 'expo-router';
 import { useTheme } from './ThemeContext';
 import { supabase } from '../storage/supabase';  
 import { CommonStyles } from './CommonStyles';
+import SHA256 from 'crypto-js/sha256';
 
 const width = Dimensions.get('window').width - 1;
 
@@ -33,8 +34,10 @@ export default function ForgotPassword() {
       }
 
       if (user.length > 0) {
+        const hashedPassword = SHA256(newPassword).toString();
+
         const { error: updateError } = await supabase.from('Users')
-        .update({ password: newPassword })
+        .update({ password: hashedPassword })
         .eq('email', email);
 
         if (updateError) {

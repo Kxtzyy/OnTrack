@@ -4,10 +4,11 @@ import { useRouter } from 'expo-router';
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useTheme } from './ThemeContext';    // Import the ThemeContext
 import Index from './(tabs)';
-// import bcrypt from 'bcryptjs';
 import { supabase } from '../storage/supabase';
 import { useAuth } from './LoginContext';
 import { CommonStyles } from './CommonStyles'; 
+import SHA256 from 'crypto-js/sha256';
+
 
 
 const width = Dimensions.get('window').width-1
@@ -49,8 +50,10 @@ export default function Profile() {
         return;
       }
 
+      const hashedPassword = SHA256(password).toString();
+
       // add new user to table
-      const { error: insertError } = await supabase.from('Users').insert([{ email, username, password }]);
+      const { error: insertError } = await supabase.from('Users').insert([{ email, username, password: hashedPassword }]);
 
       if (insertError) {
         console.error(insertError);
@@ -81,7 +84,9 @@ export default function Profile() {
         return;
       }
 
-      if (users.length > 0 && password === users[0].password) {   // must use indexing as supabase returns array
+      const hashedInputPassword = SHA256(password).toString();
+
+      if (users.length > 0 && hashedInputPassword === users[0].password) {   // must use indexing as supabase returns array
         await login(users[0]);                                    // === is strict equality (types must match aswell)
         setMessage('Logged in successfully!');                   
         router.back();

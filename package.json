@@ -26,6 +26,7 @@
     "@supabase/supabase-js": "^2.49.4",
     "@thednp/color-picker": "^2.0.3",
     "bcryptjs": "^3.0.2",
+    "crypto-js": "^4.2.0",
     "expo": "~52.0.46",
     "expo-asset": "^11.0.5",
     "expo-blur": "~14.0.3",
@@ -68,6 +69,7 @@
   "devDependencies": {
     "@babel/core": "^7.25.2",
     "@react-native-community/cli": "latest",
+    "@types/crypto-js": "^4.2.2",
     "@types/jest": "^29.5.12",
     "@types/react": "~18.3.12",
     "@types/react-native": "^0.72.8",

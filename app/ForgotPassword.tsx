@@ -10,13 +10,14 @@ const width = Dimensions.get('window').width - 1;
 export default function ForgotPassword() {
   const router = useRouter();
   const [email, setEmail] = useState('');
+  const [newPassword, setNewPassword] = useState('');
   const [message, setMessage] = useState('');
   const { currentTheme } = useTheme();
   const commonStyles = CommonStyles();
 
   const passwordReset = async () => {
-    if (!email) {
-      setMessage('Please enter your email.');
+    if (!email || !newPassword) {
+      setMessage('Please fill in both fields.');
       return;
     }
 
@@ -32,10 +33,21 @@ export default function ForgotPassword() {
       }
 
       if (user.length > 0) {
-        const userPassword = user[0].password;
-        Alert.alert('Your password is: ' + userPassword);
+        const { error: updateError } = await supabase.from('Users')
+        .update({ password: newPassword })
+        .eq('email', email);
+
+        if (updateError) {
+            console.error(updateError);
+            setMessage('An error occurred restting your password.');
+            return;
+        }
+
+        Alert.alert('Your password has been reset.');
         setEmail('');
+        setNewPassword('');
         setMessage('');
+        router.back();
       } else {
         setMessage('An account with that email does not exist.');
       }
@@ -47,7 +59,7 @@ export default function ForgotPassword() {
 
   return (
     <View style={commonStyles.overlay}>
-      <Text style={commonStyles.header}>Forgot Password</Text>
+      <Text style={commonStyles.header}>Reset Password</Text>
 
       <SafeAreaView style={commonStyles.container}>
         <TextInput
@@ -60,6 +72,15 @@ export default function ForgotPassword() {
           autoCapitalize="none"
         />
 
+        <TextInput
+          style={commonStyles.input}
+          placeholder="Enter new password"
+          placeholderTextColor={currentTheme.gray}
+          value={newPassword}
+          onChangeText={setNewPassword}
+          secureTextEntry
+        />
+
         {message !== '' && (
           <Text style={{ color: currentTheme.lightblue, marginTop: 5 }}>
             {message}
@@ -67,7 +88,7 @@ export default function ForgotPassword() {
         )}
 
         <Pressable onPress={passwordReset} style={commonStyles.button}>
-          <Text style={commonStyles.buttonText}>Get Password</Text>
+          <Text style={commonStyles.buttonText}>Confirm</Text>
         </Pressable>
       </SafeAreaView>
       <Pressable onPress={() => router.back()} style={commonStyles.button}>

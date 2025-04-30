@@ -1104,13 +1104,13 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     height: 40,
-    width: 40,
+    width: 50,
   },
 
   trackerText: {
     fontSize: 14,
     fontWeight: "500",
-    marginLeft: 10,
+    marginLeft: 20,
     flex:1
   },
 });

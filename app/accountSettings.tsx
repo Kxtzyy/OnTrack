@@ -2,17 +2,54 @@ import React from "react";
 import { View, Text, Pressable, StyleSheet, Alert } from "react-native";
 import { useTheme } from "./ThemeContext";
 import { router } from "expo-router";
+import { supabase } from '../storage/supabase';
+import {useAuth} from '@/app/LoginContext'
 
 export default function AccountSettings() {
   const { currentTheme: theme } = useTheme();
-
+  const { user,logout } = useAuth();
   const handleDeleteAccount = () => {
     Alert.alert(
       "Delete Account",
       "Are you sure you want to delete your account? This action cannot be undone.",
       [
         { text: "Cancel", style: "cancel" },
-        { text: "Delete", style: "destructive", onPress: () => console.log("Account deleted") },
+        { text: "Delete", style: "destructive", onPress: async () => { // <<< async here
+          
+          if (user === null) {
+            console.log("Not logged in");
+          } else {
+            const { data, error } = await supabase
+              .from('Users')
+              .select('user_id')
+              .eq('email', user.email) 
+              .single();
+            if (error) {
+              console.error("Failed to get user_id:", error);
+            } else {
+              const user_id = data.user_id;
+              console.log("User ID is:", user_id);
+              const {data: deleteDataSectionTracker, error: deleteSectionTrackerError } = await supabase
+              .from('Section_Trackers')
+              .delete()
+              .eq('user_id', user_id)
+              const {data: deleteDataSections, error: deleteSectionErrors } = await supabase
+              .from('Sections')
+              .delete()
+              .eq('user_id', user_id)
+              const {data: deleteDataTrackers, error: deleteTrackersError } = await supabase
+              .from('Trackers')
+              .delete()
+              .eq('user_id', user_id)
+              const {data: deleteDataUsers, error: deleteUsersError } = await supabase
+              .from('Users')
+              .delete()
+              .eq('user_id', user_id)
+              await logout()
+              console.log("Deleted")
+            }
+          }
+        } },
       ]
     );
   };

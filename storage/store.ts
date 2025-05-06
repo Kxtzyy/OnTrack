@@ -2,7 +2,6 @@ import { create } from 'zustand'
 import { TimePeriod, Tracker } from '@/types/Tracker'
 import { Section } from '@/types/Section'
 import { openDatabase } from '@/storage/sqlite'
-import { TrackerHistory } from '@/types/TrackerHistory'
 
 
 
@@ -26,26 +25,31 @@ export const useTrackerStore = create<TrackersStore>((set, get) => ({
 
     // Persists brand new tracker
     addTracker: async (tracker) => {
-      // Local state
-      set(state => ({ trackers: [...state.trackers, tracker] }));
+      
 
       // Updates database
-      const db = await openDatabase();
-      await db.runAsync(
-        `INSERT INTO trackers
-           (tracker_name, icon, time_period, unit,
-            bound_amount, current_amount, last_modified)
-         VALUES (?, ?, ?, ?, ?, ?, ?)`,
-        [
-          tracker.trackerName,
-          tracker.icon,
-          tracker.timePeriod,
-          tracker.unit ?? null,
-          tracker.bound,
-          tracker.currentAmount,
-          tracker.last_modified,
-        ],
-      );
+      try{
+        const db = await openDatabase();
+        await db.runAsync(
+          `INSERT INTO trackers
+            (tracker_name, icon, time_period, unit,
+              bound_amount, current_amount, last_modified)
+          VALUES (?, ?, ?, ?, ?, ?, ?)`,
+          [
+            tracker.trackerName,
+            tracker.icon,
+            tracker.timePeriod,
+            tracker.unit ?? null,
+            tracker.bound,
+            tracker.currentAmount,
+            tracker.last_modified,
+          ],
+        );
+      }catch(err){
+        return;
+      }
+      // Local state
+      set(state => ({ trackers: [...state.trackers, tracker] }));
     },
 
     // Non persistent helper
@@ -111,12 +115,18 @@ export const useSectionStore = create<SectionsHomeStore>((set, get) => ({
   setSectionsH: (newSectionsH) => set({ sectionsH: newSectionsH }),
 
   addSectionH: async (sectionH) => {
+    try{
     const db = await openDatabase();
     await db.runAsync(
         `INSERT INTO sections (section_title, time_period, position, last_modified)
          VALUES (?, ?, ?, ?)`,
         [sectionH.sectionTitle, sectionH.timePeriod, sectionH.position, sectionH.lastModified]
       );
+    }catch(error){
+      console.log("problem with insertion")
+      return;
+    };
+    
 
     set((state) => ({
       sectionsH: [...state.sectionsH, sectionH]

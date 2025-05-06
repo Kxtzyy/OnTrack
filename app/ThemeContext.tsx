@@ -3,6 +3,7 @@ import React, { createContext, useContext, useState } from "react";
 // Define themes
 const themes = {
   dark: {
+    defaultIcon: '#FFFFFF',
     "101010": "#101010", // Background color
     "FFFFFF": "#FFFFFF", // Text color
     "1E1E1E": "#1E1E1E", // Card background color
@@ -33,6 +34,7 @@ const themes = {
     trackerSeparation : 'transparent',
   },
   light: {
+    defaultIcon: '#000000',
     "101010": "#FFFFFF", // Background color
     "FFFFFF": "#000000", // Text color
     "1E1E1E": "#F5F5F5", // Card background color

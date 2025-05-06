@@ -7,7 +7,7 @@ import { iconsToChoose } from '@/assets/images/iconsToChoose';
 import { IconItem, isUri } from './newTrackerView';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
-import ColorPicker, { Panel1, Preview, HueSlider } from 'reanimated-color-picker';
+import ColorPicker, { Panel1, Preview, HueSlider, Swatches } from 'reanimated-color-picker';
 import { runOnJS } from 'react-native-reanimated';
 import { useTheme } from './ThemeContext';
 
@@ -405,16 +405,22 @@ const styles = StyleSheet.create({
                   <View
                     style={{
                       position: 'absolute',
-                      top: iconPosition.y + 100 + 5, // + {icon size} + {5} offset
-                      left: iconPosition.x + 50 - 100 - 10, // + {half icon size} - {picker size} - {padding} (might be off center?)
-                      backgroundColor: currentTheme.white,
+                      top: iconPosition.y + 100 + 7, // + {icon size} + {5} offset
+                      left: iconPosition.x + 50 - 100 - 15, // + {half icon size} - {picker size} - {padding} (might be off center?)
+                      backgroundColor: currentTheme['101010'],
                       padding: 10,
                       borderRadius: 8,
+                      borderColor: currentTheme['dimgray'],
+                      borderWidth: 2,
                     }}
                     pointerEvents="auto" //blocks touch (dont exit on colour press)
                   >
                     <ColorPicker
-                      style={{ width: 200, height: 200 }}
+                      style={{ 
+                        width: 200, 
+                        height: 200,
+      
+                      }}
                       value={selectedColor}
                       onComplete={onSelectColorWorklet}
                     >
@@ -423,15 +429,27 @@ const styles = StyleSheet.create({
                       />
                       <Panel1 /> 
                       <HueSlider />
+                      <Swatches
+                      style = {[{
+                        marginTop: 10,
+                        flexWrap: 'wrap',      // Allows wrapping to next row
+                        flexDirection: 'row',  // Aligns items horizontally
+                        justifyContent: 'space-evenly', // Distribute evenly
+                      }]}
+                      colors={['#FFB3BA', '#FFDFBA', '#FFFFBA', '#BAFFC9', '#BAE1FF', '#D8BFD8',
+                      '#E0BBE4', '#F7CAC9', '#F4C2C2', '#D1C6E3', '#C1D3FE', '#A8DADC',
+                      '#BFD8B8', '#F5F5F5', '#D3D3D3']}
+                      />
+                      
                     </ColorPicker>
-                    {/* 'Set Default Colour' button (only white as of current for dark theme) */}
+                    {/* 'Set Default Colourƒ' button (only white as of current for dark theme) */}
                     <Pressable
-                      onPress={() => setSelectedColor(currentTheme["FFFFFF"])}
+                      onPress={() => setSelectedColor(currentTheme["defaultIcon"])}
                       style={[
                         styles.colorPickerButtons,
                         { 
                           backgroundColor: currentTheme.white,
-                          marginTop: 55 //for some reason need margin, height of hue slider = 50 + leighweight
+                          marginTop: 200 //for some reason need margin, height of hue slider = 50 + leighweight
                         }
                       ]}
                     >

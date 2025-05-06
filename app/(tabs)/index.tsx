@@ -17,6 +17,7 @@ import { CalendarProps } from "../../components/CalendarComponent";
 import NewSectionModal from "@/components/SectionModal";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { getIconInfo } from "@/types/Misc";
+import Svg, { Text as SvgText } from 'react-native-svg';
 
 import { useSectionStore } from "@/storage/store";
 import type { TimePeriod } from "@/types/Tracker";
@@ -792,7 +793,10 @@ export default function Index() {
                   >
                     
                     
+                    
+
                     <Pressable
+                      
                         // Single tap increment 
                         onPress={() => {
                             if (!editMode) { // don’t increment while you’re dragging sections
@@ -809,7 +813,7 @@ export default function Index() {
                             params: {
                                 trackerN: tracker.trackerName,
                                 timeP:    tracker.timePeriod,
-                                color:    getIconInfo(tracker.icon).color,
+                                color:    (getIconInfo(tracker.icon).color == '#ffffff' || getIconInfo(tracker.icon).color == '#000000') ? currentTheme['defaultIcon'] : getIconInfo(tracker.icon).color,
                                 image:    getIconInfo(tracker.icon).name,
                             },
                             });
@@ -821,7 +825,7 @@ export default function Index() {
                         borderColor: editMode ? currentTheme.dimgray : currentTheme.dimgray,
                         backgroundColor: hexToRgba( 
                             // Set to 0 for transparency                          
-                          getIconInfo(tracker.icon).color, 0               
+                            (getIconInfo(tracker.icon).color == '#ffffff' || getIconInfo(tracker.icon).color == '#000000') ? currentTheme['defaultIcon'] : getIconInfo(tracker.icon).color, 0               
                         ),
                       },
                     ]}                                                       
@@ -829,7 +833,8 @@ export default function Index() {
                     {(() => {                                                
                       const bound = tracker.bound ?? 0;                   
                       const progress = bound !== 0 ? Math.min(1, tracker.currentAmount / Math.abs(bound)) : 0;                                              
-                      return (                                               
+                      return (        
+                                                         
                         <View                                               
                           style={{                                          
                             position: "absolute",                           
@@ -839,7 +844,7 @@ export default function Index() {
                             height: `${progress * 100}%`,                   
                             backgroundColor: hexToRgba(     
                                 // Set to 0.15 for filling up icon               
-                                getIconInfo(tracker.icon).color, 0.15   
+                                (getIconInfo(tracker.icon).color == '#ffffff' || getIconInfo(tracker.icon).color == '#000000') ? currentTheme['defaultIcon'] : getIconInfo(tracker.icon).color, 0.15   
                             ),                                              
                           }}                                                
                         />                                                  

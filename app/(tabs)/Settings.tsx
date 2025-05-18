@@ -1,3 +1,14 @@
+/*
+Settings Screen
+- Settings screen, accessible via the tab bar
+- Has settings options: 
+    - Account
+    - Backup & Restore
+    - Tracker List
+    - Help & Support
+    - Disable notifications
+*/
+
 import { useState } from "react"; // Import useState for managing toggle state
 import { Text, View, Pressable, StyleSheet, ScrollView, SafeAreaView } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";

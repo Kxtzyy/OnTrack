@@ -1,7 +1,12 @@
-// Imports
+/*
+Calendar Screen
+- Displays a calendar strip (daily / weekly / monthly
+- Displays a list of user sections and trackers and shows progress
+- Live data comes from Zustand stores, past data is fetched from SQLite
+*/
 
-import { View, Alert, Pressable, Text, StyleSheet, ScrollView, TouchableOpacity } from "react-native";
-import { MaterialCommunityIcons, Entypo, Ionicons, AntDesign } from "@expo/vector-icons";
+import { View, Pressable, Text, StyleSheet, ScrollView, TouchableOpacity } from "react-native";
+import { MaterialCommunityIcons, Entypo } from "@expo/vector-icons";
 import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
 import { useState, useEffect } from "react";
@@ -11,21 +16,19 @@ import { CalendarProps } from "../../components/CalendarComponent";
 import { Dimensions } from "react-native";
 import moment from "moment";
 import { useTheme } from "../ThemeContext"; // Import ThemeContext
-import { useSectionStore, useTrackerStore } from "@/storage/store";
-import { Tracker } from "@/types/Tracker"; 
-import { Section } from "@/types/Section"; 
+import { useSectionStore, useTrackerStore } from "@/storage/store"; 
 import { getImage } from "../trackerList"; 
 import { getIconInfo } from "@/types/Misc"; 
 import { useAuth } from "../LoginContext";
-import { openDatabaseSync } from "expo-sqlite";
 import { openDatabase } from "@/storage/sqlite";
 
-
+// Configures so that Monday is first day of the week
 moment.updateLocale('en', {
-    week: { dow: 1, // Monday is the first day of the week
+    week: { dow: 1, 
     },
   });
 
+// Converts a hex colour to rgba string (Red, Green, Blue, alpha)
 const hexToRgba = (hex: string, alpha: number): string => {
     const h = hex.replace('#', '');
     const bigint = parseInt(h, 16);
@@ -35,19 +38,21 @@ const hexToRgba = (hex: string, alpha: number): string => {
     return `rgba(${r},${g},${b},${alpha})`;
   };
 
-// Helper to normalise display size on different size displays
+// Device width for dynamic screen layout
 const screenWidth = Dimensions.get("window").width;
+
 export default function Index() {
+
     // Theme and naviagation
     const { currentTheme } = useTheme(); // Access current theme
     const router = useRouter();
-    const insets = useSafeAreaInsets();
-    // Calendar ranges and pages
+
+    // Calendar Mode
     type CalendarMode = CalendarProps["mode"];
     const buttons: CalendarMode[] = ["Daily", "Weekly", "Monthly"];
     const [selected, setSelected] = useState<CalendarMode>("Daily");
 
-    // Selected date state
+    // Selected Date
     const [selectedDate, setSelectedDate] = useState<string>(moment().format("YYYY-MM-DD"));
     const [nameCurrentBound, setNameCurrentBound] = useState<{name: String,current: number, bound: number}[] | undefined>(undefined);
 
@@ -106,7 +111,8 @@ export default function Index() {
     const sections = useSectionStore((state) => state.sectionsH);
     const addTrackerToSection = useSectionStore((state) => state.addTrackerToSection);
     const { user } = useAuth();
-    // Dynamic styles for tracker wrappers
+
+    // Dynamic style helper (DSH)
     const trackerWrapperStyle = (height: number) => ({
     width: screenWidth - 35,
     height: 72,
@@ -118,7 +124,7 @@ export default function Index() {
     overflow: "hidden" as const,
     });
 
-    // Dynamic styles for corner buttons
+    // DSH
     const cornerButtonsStyle = {
     backgroundColor: currentTheme["101010"],
     width: 45,
@@ -127,7 +133,7 @@ export default function Index() {
     alignItems: "center" as const,
     };
 
-    // Dynamic styles for inner button layout
+    // DSH
     const buttonContentWrapper = {
     flexDirection: "row" as const,
     alignItems: "center" as const,
@@ -137,6 +143,7 @@ export default function Index() {
     backgroundColor: "transparent",
     };
 
+    // DSH
     const pressableTextStyle = {
     color: currentTheme.white,
     fontSize: 16,
@@ -160,8 +167,6 @@ export default function Index() {
     //whole screen
     <SafeAreaView style={[
       styles.safeArea, { 
-      //position: 'relative',
-      //backgroundColor: c',
       backgroundColor: currentTheme["101010"],
      }]}>
       <View
@@ -306,12 +311,9 @@ export default function Index() {
 
                 const currentProgress = (bound !== 0? Math.min(1, current / Math.abs(bound)) : 0) ;
 
-                // To test progress values, maybe add animations?
-                // const currentProgress = 0.6; 
 
-
+                // Render Trackers, Sections and Progress
                 return (
-                    // Renders trackers, and their progress
                     <View
                     key={`${tracker.trackerName}-${tracker.timePeriod}`}
                     style={[trackerWrapperStyle(60), { backgroundColor: emptyBackgroundColor }]}
@@ -389,33 +391,13 @@ export default function Index() {
     );
 }
 
-// Stylesheet for stattic styles only
+// Stylesheet for static styles only
 const styles = StyleSheet.create({
     safeArea: {
         flex: 1,
         justifyContent: "flex-start",
         alignItems: "center",
       },
-  calendarContainer: {
-    //flex: 1,
-    flexDirection: 'column',
-    alignItems: "center",
-  },
-  header: {
-    width: screenWidth,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    paddingHorizontal: 16,
-    paddingTop: 8,
-  },
-  buttonContainer: {
-    width: (3 * screenWidth) / 4,
-    flexDirection: "row",
-    alignContent: "center",
-    justifyContent: "space-between",
-    paddingHorizontal: 16,
-    paddingTop: 8,
-  },
   button: {
     flex: 1,
     alignItems: "center",

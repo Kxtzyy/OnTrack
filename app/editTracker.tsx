@@ -36,7 +36,7 @@ export default function editTracker(){
     let tracker = useTrackerStore((state) =>
       state.getTracker(trackerName, timePeriod)
     ); // Get the tracker from the store using the provided name and time period
-    const addTracker = useTrackerStore((s) => s.addTracker2); // Add tracker function from the store
+    const addTracker = useTrackerStore((s) => s.addTrackerMemOnly); // Add tracker function from the store
 
     /* States */
     const timePeriods = ['Daily', 'Weekly', 'Monthly', 'Yearly']; // Available time periods

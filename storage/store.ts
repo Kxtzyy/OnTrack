@@ -12,7 +12,7 @@ type TrackersStore = {
     setTrackers: (newTrackers: Tracker[]) => void
     addTracker: (tracker: Tracker) => Promise<void>
     getTracker: (name: string, timePeriod: string) => Tracker | undefined
-    addTracker2: (tracker: Tracker) => void
+    addTrackerMemOnly: (tracker: Tracker) => void
     incrementTracker: (trackerName: string, timePeriod: TimePeriod, change?: number) => Promise<void>
 }
 
@@ -53,7 +53,7 @@ export const useTrackerStore = create<TrackersStore>((set, get) => ({
     },
 
     // Non persistent helper
-    addTracker2: (tracker) =>
+    addTrackerMemOnly: (tracker) =>
       set(state => ({ trackers: [...state.trackers, tracker] })),
 
     // Retrieve single tracker

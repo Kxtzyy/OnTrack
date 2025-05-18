@@ -25,10 +25,8 @@ export class Tracker { //export so referencable
       this.bound = bound;
       this.currentAmount = currentAmount ? currentAmount : 0;
       this.unit = unit;
-      // INSERT INTO A SECTION
-      // INSERT INTO DATABASE
     }
 
 }
 
-export type TimePeriod = 'Daily' | 'Weekly' | 'Monthly' | 'Yearly'; 
+export type TimePeriod = 'Daily' | 'Weekly' | 'Monthly'; 

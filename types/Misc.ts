@@ -1,8 +1,12 @@
+import { useTheme } from "../app/ThemeContext"; // Import the ThemeContext
+
 //get icon info {type,name,color}
-export const getIconInfo = (input: string): { type: string; name: string; color: string } => {
+export const getIconInfo = (input: string): { type: string; name: string; color: string,
+ } => {
+
     var type : string = "fa5";
     var name : string = "";
-    var color : string = "themedefault";
+    var color : string = 'white';
     const inputSplit = input.split('|');
     if (inputSplit.length === 3 || inputSplit.length === 2){
         type = inputSplit[0];

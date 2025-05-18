@@ -343,6 +343,40 @@ export default function Index() {
                             : getImage(tracker, 30, currentTheme.white).icon
                         }
                         <Text style={pressableTextStyle}>{tracker.trackerName}</Text>
+                        <Text style ={[{
+                            position: 'absolute',
+                            right: 0,
+                            marginRight: 15,
+                            fontSize: 18,
+                            fontWeight: '100',
+                            color: currentTheme['white'],
+                        }]}>
+                            {((selected === "Daily")
+                            ? (selectedDate === moment().format('YYYY-MM-DD') ? (tracker.currentAmount ?? 0) : (ncm.current != 0 ? ncm.current : ""))
+                            : (selected === 'Weekly')
+                                ? (selectedDate === moment().startOf('isoWeek').format('YYYY-MM-DD') ? (tracker.currentAmount ?? 0) : (ncm.current != 0 ? ncm.current : ""))
+                                : (selectedDate === moment().startOf('month').format('YYYY-MM-DD') ? (tracker.currentAmount ?? 0) : (ncm.current != 0 ? ncm.current : ""))
+                            )}
+
+                            {((selected === "Daily")
+                            ? (selectedDate === moment().format('YYYY-MM-DD') ? (tracker.bound ?? 0) : ncm.bound)
+                            : (selected === 'Weekly')
+                                ? (selectedDate === moment().startOf('isoWeek').format('YYYY-MM-DD') ? (tracker.bound ?? 0) : ncm.bound)
+                                : (selectedDate === moment().startOf('month').format('YYYY-MM-DD') ? (tracker.bound ?? 0) : ncm.bound)
+                            ) != 0 && (
+                            <>
+                                {" / "}
+                                {((selected === "Daily")
+                                ? (selectedDate === moment().format('YYYY-MM-DD') ? (tracker.bound ?? 0) : ncm.bound)
+                                : (selected === 'Weekly')
+                                    ? (selectedDate === moment().startOf('isoWeek').format('YYYY-MM-DD') ? (tracker.bound ?? 0) : ncm.bound)
+                                    : (selectedDate === moment().startOf('month').format('YYYY-MM-DD') ? (tracker.bound ?? 0) : ncm.bound)
+                                )}
+                            </>
+                            )}
+
+                            
+                        </Text>
                     </Pressable>
                     </View>
                 );

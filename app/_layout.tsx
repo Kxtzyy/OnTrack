@@ -102,6 +102,8 @@ export default function Layout() {
           <Stack.Screen name="newTrackerView" options={{ presentation: "transparentModal", title: "New Tracker" }} />
           <Stack.Screen name="userLoggedIn" options={{ presentation: "transparentModal", title: "User Logged In" }} />
           <Stack.Screen name="selectImage" options={{ presentation: "transparentModal", title: "Select Image" }} />
+          <Stack.Screen name="ForgotPassword" options={{ presentation: "transparentModal", title: "Forgot Password" }} />
+          
         </Stack>
       </ThemeProvider>
     </LoginProvider>

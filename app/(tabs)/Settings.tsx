@@ -12,7 +12,7 @@ Settings Screen
 import { useState } from "react"; // Import useState for managing toggle state
 import { Text, View, Pressable, StyleSheet, ScrollView, SafeAreaView } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { useTheme } from "../ThemeContext"; // Import ThemeContext for theme management
+import { useTheme } from "../Contexts/ThemeContext"; // Import ThemeContext for theme management
 import { useRouter } from "expo-router"; // Import router for navigation
 
 export default function Index() {
@@ -105,25 +105,31 @@ export default function Index() {
       title: "Account",
       description: "Profile | Email | Password",
       icon: "account",
-      onPress: () => router.push("../accountSettings"), // Navigate to account settings
+      onPress: () => router.push("../Settings/accountSettings"), // Navigate to account settings
     },
     {
       title: "Backup & Restore",
       description: "Cloud Sync | Export Trackers",
       icon: "cloud-upload",
-      onPress: () => router.push("../BackupAndRestore"), // Placeholder for backup functionality
+      onPress: () => router.push("../Settings/BackupAndRestore"), // Placeholder for backup functionality
     },
     {
       title: "Tracker List",
       description: "See Trackers | Edit Trackers",
       icon: "clipboard-list",
-      onPress: () => router.push("../../trackerList"), // Navigate to tracker list
+      onPress: () => router.push("../Settings/trackerList"), // Navigate to tracker list
     },
     {
       title: "Help & Support",
       description: "FAQs | Contact Support",
       icon: "help-circle",
-      onPress: () => router.push("../helpSupport"), // Navigate to help and support
+      onPress: () => router.push("../Settings/helpSupport"), // Navigate to help and support
+    },
+    {
+      title: "Display Preferences",
+      description: "Icon Display | Default Icon",
+      icon: "help-circle",
+      onPress: () => router.push("../Settings/helpSupport"), // Navigate to visual settings
     },
   ];
 
@@ -155,8 +161,8 @@ export default function Index() {
               style={[
                 styles.settingsItem,
                 {
-                  backgroundColor: currentTheme["101010"], // Set background color to currentTheme["101010"]
-                  borderWidth: 1, // Add a border
+                  backgroundColor: currentTheme["101010"],
+                  borderWidth: isDarkMode ? 1 : 2,
                   borderColor: currentTheme.dimgray, // Set border color to currentTheme.dimgray
                 },
               ]}

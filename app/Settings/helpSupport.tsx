@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Text, ScrollView, StyleSheet, SafeAreaView } from "react-native";
-import { useTheme } from "./ThemeContext";
+import { useTheme } from "../Contexts/ThemeContext";
 
 export default function HelpSupport() {
   const { currentTheme } = useTheme();

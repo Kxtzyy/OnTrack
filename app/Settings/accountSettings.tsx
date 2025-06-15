@@ -1,9 +1,9 @@
 import React from "react";
 import { View, Text, Pressable, StyleSheet, Alert } from "react-native";
-import { useTheme } from "./ThemeContext";
+import { useTheme } from "../Contexts/ThemeContext";
 import { router } from "expo-router";
-import { supabase } from '../storage/supabase';
-import {useAuth} from '@/app/LoginContext'
+import { supabase } from '../../storage/supabase';
+import {useAuth} from '@/app/Contexts/LoginContext'
 
 export default function AccountSettings() {
   const { currentTheme: theme } = useTheme();
@@ -55,12 +55,12 @@ export default function AccountSettings() {
   };
 
   const handleChangeEmail = () => {
-    router.push('/changeEmail');
+    router.push('../Account/changeEmail');
     // Add navigation or logic for changing email
   };
 
   const handleChangePassword = () => {
-    router.push('/changePassword');
+    router.push('../Account/changePassword');
     // Add navigation or logic for changing password
   };
 

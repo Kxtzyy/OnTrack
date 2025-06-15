@@ -75,19 +75,19 @@ export const ThemeContext = createContext({
 
 // Theme provider component
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-        const [isDarkMode, setIsDarkMode] = useState(true);
-        const currentTheme = isDarkMode ? themes.dark : themes.light;
-      
-        const toggleTheme = () => {
-          console.log("Toggling theme...");
-          setIsDarkMode((prevMode) => !prevMode);
-        };
-      
-        return (
-          <ThemeContext.Provider value={{ isDarkMode, toggleTheme, currentTheme }}>
-            {children}
-          </ThemeContext.Provider>
-        );
+  const [isDarkMode, setIsDarkMode] = useState(true);
+  const currentTheme = isDarkMode ? themes.dark : themes.light;
+
+  const toggleTheme = () => {
+    console.log("Toggling theme...");
+    setIsDarkMode((prevMode) => !prevMode);
+  };
+
+  return (
+    <ThemeContext.Provider value={{ isDarkMode, toggleTheme, currentTheme }}>
+      {children}
+    </ThemeContext.Provider>
+  );
 };
 
 // Custom hook to use the theme context

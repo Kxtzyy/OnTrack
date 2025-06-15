@@ -5,7 +5,7 @@ import { FontAwesome5, Ionicons } from "@expo/vector-icons";
 import DropDownPicker from "react-native-dropdown-picker";
 import { PixelRatio } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { useTheme } from './ThemeContext';
+import { useTheme } from './Contexts/ThemeContext';
 
 import { openDatabase } from '@/storage/sqlite';
 import { useTrackerStore } from '@/storage/store';
@@ -136,7 +136,7 @@ export default function newTrackerView() {
     );
   
     try {
-      await addTracker(newTracker); // Zustand + SQLite combined
+      await addTracker(newTracker);
       router.back(); // Close modal/view
     } catch (err) {
       console.error('Tracker could not save:', err);
@@ -201,7 +201,6 @@ export default function newTrackerView() {
             </Pressable>
           )}
         </View>
-
 
         {/* Tracker Title */}
         <View style={commonStyles.inputContainer}>

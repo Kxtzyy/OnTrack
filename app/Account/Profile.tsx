@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, SafeAreaView, Pressable, Dimensions, PixelRatio, Image } from 'react-native';
 import { useRouter } from 'expo-router';
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { useTheme } from './ThemeContext';    // Import the ThemeContext
-import Index from './(tabs)';
-import { supabase } from '../storage/supabase';
-import { useAuth } from './LoginContext';
-import { CommonStyles } from './CommonStyles'; 
+import { useTheme } from '../Contexts/ThemeContext';    // Import the ThemeContext
+import Index from '../(tabs)';
+import { supabase } from '../../storage/supabase';
+import { useAuth } from '../Contexts/LoginContext';
+import { CommonStyles } from '../CommonStyles'; 
 import SHA256 from 'crypto-js/sha256';
 
 
@@ -150,7 +150,7 @@ export default function Profile() {
              </Text>
            </Pressable>
 
-           <Pressable onPress={() => router.push('/ForgotPassword')}>
+           <Pressable onPress={() => router.push('./ForgotPassword')}>
              <Text style={commonStyles.blueText}>Forgot your password?</Text>
            </Pressable>
 

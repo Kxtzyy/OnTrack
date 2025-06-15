@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { StyleSheet, Text, View, ScrollView, Dimensions } from 'react-native';
 import moment, { Moment } from 'moment';
 import Date from './DateComponent'; 
-import { useTheme } from '../app/ThemeContext'; // Import useTheme
+import { useTheme } from '../app/Contexts/ThemeContext'; // Import useTheme
 
 moment.updateLocale('en', {
   week: { dow: 1, // Monday is the first day of the week

@@ -1,9 +1,9 @@
 import React from "react";
 import { View, Text, Pressable, StyleSheet, Alert } from "react-native";
-import { useTheme } from "./ThemeContext";
+import { useTheme } from "../Contexts/ThemeContext";
 import { createClient } from "@supabase/supabase-js";
 import { openDatabase } from "@/storage/sqlite";
-import {useAuth} from '@/app/LoginContext'
+import {useAuth} from '@/app/Contexts/LoginContext'
 import {setupDatabase} from "@/components/ZustandRefresh";
 import { router } from "expo-router";
 

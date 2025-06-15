@@ -1,5 +1,5 @@
 import { StyleSheet, Dimensions, PixelRatio } from 'react-native';
-import { useTheme } from './ThemeContext';
+import { useTheme } from './Contexts/ThemeContext';
 import { useMemo } from 'react';
 
 const width = Dimensions.get('window').width-1

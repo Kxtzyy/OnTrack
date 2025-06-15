@@ -15,11 +15,11 @@ import Calendar from "../../components/CalendarComponent";
 import { CalendarProps } from "../../components/CalendarComponent";
 import { Dimensions } from "react-native";
 import moment from "moment";
-import { useTheme } from "../ThemeContext"; // Import ThemeContext
+import { useTheme } from "../Contexts/ThemeContext"; // Import ThemeContext
 import { useSectionStore, useTrackerStore } from "@/storage/store"; 
-import { getImage } from "../trackerList"; 
+import { getImage } from "../Settings/trackerList"; 
 import { getIconInfo } from "@/types/Misc"; 
-import { useAuth } from "../LoginContext";
+import { useAuth } from "../Contexts/LoginContext";
 import { openDatabase } from "@/storage/sqlite";
 
 // Configures so that Monday is first day of the week

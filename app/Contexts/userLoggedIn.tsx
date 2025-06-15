@@ -4,7 +4,7 @@ import { useRouter } from 'expo-router';
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useTheme } from './ThemeContext';
 import { useAuth } from './LoginContext'; 
-import { CommonStyles } from './CommonStyles';
+import { CommonStyles } from '../CommonStyles';
 
 const width = Dimensions.get('window').width - 1;
 

@@ -1,19 +1,19 @@
 import { router } from 'expo-router';
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, Pressable } from 'react-native';
-import { supabase } from '../storage/supabase';
-import { useAuth } from './LoginContext'; 
-import { useTheme } from './ThemeContext';
+import { supabase } from '../../storage/supabase';
+import { useAuth } from '../Contexts/LoginContext'; 
+import { useTheme } from '../Contexts/ThemeContext';
 
 export default function ChangePasswordScreen() {
   const { currentTheme: theme } = useTheme();
   const [currentPassword, setCurrentPassword] = useState('');
-  const [newPassword, setNewPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [newEmail, setNewEmail] = useState('');
+  const [comfirmEmail, setcomfirmEmail] = useState('');
   const {user} = useAuth();
   const handleChangePassword = async () => {
-    if (newPassword !== confirmPassword) {
-      alert('New passwords do not match!');
+    if (newEmail !== comfirmEmail) {
+      alert('Emails do not match!');
       return;
     }
     if (user === null){
@@ -32,7 +32,7 @@ export default function ChangePasswordScreen() {
         if (currentPassword === password) {
             const { error: updateError } = await supabase
             .from('Users')
-            .update({ password: newPassword })
+            .update({ email: newEmail })
             .eq('email', user.email);
 
             if (updateError) {
@@ -48,7 +48,7 @@ export default function ChangePasswordScreen() {
         }
     }
     
-    alert('Password changed successfully!');
+    alert('E-mail changed successfully!');
     router.back();
   };
 
@@ -67,20 +67,18 @@ export default function ChangePasswordScreen() {
 
       <TextInput
         style={styles.input}
-        placeholder="Enter new password"
+        placeholder="Enter new E-Mail"
         placeholderTextColor="#aaa"
-        secureTextEntry
-        value={newPassword}
-        onChangeText={setNewPassword}
+        value={newEmail}
+        onChangeText={setNewEmail}
       />
 
       <TextInput
         style={styles.input}
-        placeholder="Confirm new password"
+        placeholder="Confirm new E-Mail"
         placeholderTextColor="#aaa"
-        secureTextEntry
-        value={confirmPassword}
-        onChangeText={setConfirmPassword}
+        value={comfirmEmail}
+        onChangeText={setcomfirmEmail}
       />
 
       <Pressable style={[styles.button, { backgroundColor: theme["101010"] }]} onPress={handleChangePassword}>

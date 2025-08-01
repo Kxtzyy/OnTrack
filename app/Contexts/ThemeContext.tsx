@@ -1,4 +1,5 @@
-import React, { createContext, useContext, useState } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import React, { createContext, useContext, useEffect, useState } from "react";
 
 // Define themes
 const themes = {
@@ -60,7 +61,7 @@ const themes = {
     transparent: "transparent", // Transparent background
     green: "#00FF00", // Confirm button background
     white: 'black',
-    "rgba(0, 0, 0, 0.8)" : "rgba(255, 255, 255, 0.8)", // Modal background color
+    "rgba(0, 0, 0, 0.8)" : "rgba(0, 0, 0, 0.65)", // Modal background color
     "lowOpacityWhite" : "rgba(0, 0, 0, 0.2)", // on edit border
     trackerSeparation : 'dimgray',
   },
@@ -68,26 +69,55 @@ const themes = {
 
 // Create the context
 export const ThemeContext = createContext({
-        isDarkMode: true,
-        toggleTheme: () => {},
-        currentTheme: themes.dark,
+  isDarkMode: true,
+  toggleTheme: () => {},
+  currentTheme: themes.dark,
+  setTheme: (theme: string) => {},
 });
+
+//Theme getter
+async function getTheme() {
+  const theme = await AsyncStorage.getItem('theme');
+  if (theme === null){
+    console.log("no theme saved")
+    await AsyncStorage.setItem('theme', 'dark');
+    return 'dark';
+  }else{
+    console.log("theme saved is: "+theme)
+  }
+  return theme;
+}
 
 // Theme provider component
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-        const [isDarkMode, setIsDarkMode] = useState(true);
-        const currentTheme = isDarkMode ? themes.dark : themes.light;
-      
-        const toggleTheme = () => {
-          console.log("Toggling theme...");
-          setIsDarkMode((prevMode) => !prevMode);
-        };
-      
-        return (
-          <ThemeContext.Provider value={{ isDarkMode, toggleTheme, currentTheme }}>
-            {children}
-          </ThemeContext.Provider>
-        );
+  const [isDarkMode, setIsDarkMode] = useState(true);
+  useEffect(() => {
+    (async () => {
+      const lastTheme = await getTheme();
+      setIsDarkMode(lastTheme === 'light' ? false : true);
+    })();
+  }, []);
+
+  const currentTheme = isDarkMode ? themes.dark : themes.light;
+
+  const toggleTheme = () => {
+    console.log("Toggling theme...");
+    setIsDarkMode((prevMode) => !prevMode);
+  };
+
+  const setTheme = (theme: string) => {
+    if(theme == 'light'){
+      setIsDarkMode(false)
+    }else{
+      setIsDarkMode(true)
+    }
+  }
+
+  return (
+    <ThemeContext.Provider value={{ isDarkMode, toggleTheme, currentTheme, setTheme}}>
+      {children}
+    </ThemeContext.Provider>
+  );
 };
 
 // Custom hook to use the theme context

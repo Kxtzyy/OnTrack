@@ -15,11 +15,11 @@ import Calendar from "../../components/CalendarComponent";
 import { CalendarProps } from "../../components/CalendarComponent";
 import { Dimensions } from "react-native";
 import moment from "moment";
-import { useTheme } from "../ThemeContext"; // Import ThemeContext
+import { useTheme } from "../Contexts/ThemeContext"; // Import ThemeContext
 import { useSectionStore, useTrackerStore } from "@/storage/store"; 
-import { getImage } from "../trackerList"; 
+import { getImage } from "../Settings/trackerList"; 
 import { getIconInfo } from "@/types/Misc"; 
-import { useAuth } from "../LoginContext";
+import { useAuth } from "../Contexts/LoginContext";
 import { openDatabase } from "@/storage/sqlite";
 
 // Configures so that Monday is first day of the week
@@ -44,7 +44,7 @@ const screenWidth = Dimensions.get("window").width;
 export default function Index() {
 
     // Theme and naviagation
-    const { currentTheme } = useTheme(); // Access current theme
+    const { currentTheme, isDarkMode } = useTheme(); // Access current theme
     const router = useRouter();
 
     // Calendar Mode
@@ -195,9 +195,9 @@ export default function Index() {
         ]}>
             <Pressable
             onPress={() => {if (user === null){
-                router.push("/Profile")} 
+                router.push("../Account/Profile")} 
             else{
-                router.push("/userLoggedIn")
+                router.push("../Contexts/userLoggedIn")
             }
             }}
             style={[ { backgroundColor: currentTheme["101010"], height: '100%', aspectRatio: 1, justifyContent: 'center', alignItems: 'center' }]}
@@ -240,7 +240,7 @@ export default function Index() {
             ))}
             </View>
             <Pressable
-            onPress={() => router.push("/newTrackerView")}
+            onPress={() => router.push("../newTrackerView")}
             style={[ { backgroundColor: currentTheme["101010"], height: '100%', aspectRatio: 1, justifyContent: 'center', alignItems: 'center' }]}
             >
             <Entypo name="plus" size={40} color={currentTheme.white} />
@@ -291,8 +291,23 @@ export default function Index() {
                 {/* Trackers inside the section */}
                 {section.trackers.map((tracker) => {
                 const iconName = getIconInfo(tracker.icon).name;
-                const emptyBackgroundColor = hexToRgba(getIconInfo(tracker.icon).color, 0.15);
-                const fillBackgroundColor = hexToRgba(getIconInfo(tracker.icon).color, 0.5);
+                const color = getIconInfo(tracker.icon).color;
+                const defaultColor : boolean = color === '#FFFFFF' || color === '#000000' || color == 'white' || color == 'black' || color === '#ffffff';
+                const emptyBackgroundColor = hexToRgba(
+                    defaultColor //default color
+                    ? (isDarkMode
+                      ? '#FFFFFF' //dark mode (fill with white)
+                      : '#000000') //light mode (fill with black)
+                    : color //not default color
+                    , 0.15);
+                const fillBackgroundColor = hexToRgba(
+                    defaultColor
+                    ? (isDarkMode
+                      ? '#FFFFFF'
+                      : '#000000')
+                    : color 
+                    , 
+                    (!isDarkMode && defaultColor) ? 0.2 : 0.5);
                 //get current nameCurrentBound info
                 let ncm = 
                     nameCurrentBound ?  // if nameCurrentBound is valid
@@ -311,6 +326,7 @@ export default function Index() {
 
                 const currentProgress = (bound !== 0? Math.min(1, current / Math.abs(bound)) : 0) ;
 
+                
 
                 // Render Trackers, Sections and Progress
                 return (
@@ -328,7 +344,11 @@ export default function Index() {
                             params: {
                             trackerN: tracker.trackerName,
                             timeP: tracker.timePeriod,
-                            color: getIconInfo(tracker.icon).color,
+                            color: defaultColor //default color
+                            ? (isDarkMode
+                            ? '#FFFFFF' //dark mode (fill with white)
+                            : '#000000') //light mode (fill with black)
+                            : color, //not default color,
                             image: iconName,
                             },
                         })
@@ -369,10 +389,10 @@ export default function Index() {
                             <>
                                 {" / "}
                                 {((selected === "Daily")
-                                ? (selectedDate === moment().format('YYYY-MM-DD') ? (tracker.bound ?? 0) : ncm.bound)
+                                ? (selectedDate === moment().format('YYYY-MM-DD') ? (Math.abs(tracker.bound) ?? 0) : Math.abs(ncm.bound))
                                 : (selected === 'Weekly')
-                                    ? (selectedDate === moment().startOf('isoWeek').format('YYYY-MM-DD') ? (tracker.bound ?? 0) : ncm.bound)
-                                    : (selectedDate === moment().startOf('month').format('YYYY-MM-DD') ? (tracker.bound ?? 0) : ncm.bound)
+                                    ? (selectedDate === moment().startOf('isoWeek').format('YYYY-MM-DD') ? (Math.abs(tracker.bound) ?? 0) : Math.abs(ncm.bound))
+                                    : (selectedDate === moment().startOf('month').format('YYYY-MM-DD') ? (Math.abs(tracker.bound) ?? 0) : Math.abs(ncm.bound))
                                 )}
                             </>
                             )}

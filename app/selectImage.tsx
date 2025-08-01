@@ -9,7 +9,7 @@ import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import ColorPicker, { Panel1, Preview, HueSlider, Swatches } from 'reanimated-color-picker';
 import { runOnJS } from 'react-native-reanimated';
-import { useTheme } from './ThemeContext';
+import { useTheme } from './Contexts/ThemeContext';
 
 /*Color selection functions*/
 
@@ -100,14 +100,20 @@ export default function selectImage() {
   }, [originalImage]);
 
   //if selectedColor is hexcode then set originalColor
+  console.log("Selected Color going into select image: "+params.selectedColor);
   const originalColor = typeof params.selectedColor === 'string' && isHexColor(params.selectedColor)
   ? params.selectedColor
   : currentTheme["101010"]; // Use the theme's background color as fallback
-  useEffect(() => {
-    if (!selectedColor) {
-      setSelectedColor(originalColor);
-    }
+
+  useEffect(() => { //set selected color to original when original changes
+    setSelectedColor(originalColor);
   }, [originalColor]);
+
+  useEffect(() => { //set selected color to original when original changes
+    if (selectedColor.length > 7){ //bug with swatches adds ff at end, force to 7 length
+      setSelectedColor(selectedColor.slice(0, 7));
+    }
+  }, [selectedColor]);
   
   //rendering each icon
   const renderItem = ({ item }: { item: IconItem }) => {
@@ -308,13 +314,11 @@ const styles = StyleSheet.create({
   
 });
 
-
+console.log("selected color repeated: "+selectedColor);
 
 
 
     return(
-
-      //IF YOU ARE READING THIS I KNOW ITS A LOT OF VIEWS BUT THEY ARE GENUINELY ALL IMPORTANT
       //full screen overlay
       <View style={styles.overlay}> 
           {/* 'popup' box */}

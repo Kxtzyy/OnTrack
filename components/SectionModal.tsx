@@ -3,7 +3,7 @@ import { View, Modal, TextInput, Pressable, Text, StyleSheet } from "react-nativ
 import { Section } from "@/types/Section";
 import { TimePeriod } from "@/types/Tracker";
 import { useSectionStore } from "@/storage/store";
-import { useTheme } from "../app/ThemeContext";
+import { useTheme } from "../app/Contexts/ThemeContext";
 
 export default function SectionModal({
   visible,

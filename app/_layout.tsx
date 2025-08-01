@@ -1,9 +1,9 @@
 import { Stack } from "expo-router";
 import * as NavigationBar from "expo-navigation-bar";
-import { useEffect } from "react";
-import { ThemeProvider } from "./ThemeContext";
+import { useContext, useEffect } from "react";
+import { useTheme, ThemeProvider } from "./Contexts/ThemeContext";
 import { setupDatabase } from "@/components/ZustandRefresh";
-import { LoginProvider } from './LoginContext';
+import { LoginProvider } from './Contexts/LoginContext';
 import * as Notifications from "expo-notifications";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { SQLiteDatabase } from "expo-sqlite";
@@ -43,14 +43,44 @@ export default function Layout() {
 
   const randomMessage = notificationMessages[Math.floor(Math.random() * notificationMessages.length)];
 
+  async function getSettings(){
+    return{
+      notificationsOn: getNotificationsOn(),
+      defaultIcon: getDefaultIcon()
+    }
+  }
+
+  //Settings getters
+  async function getNotificationsOn(){
+    return false; //not implemented
+  }
+  async function getDefaultIcon(){
+    const defaultIcon = await AsyncStorage.getItem('defaultIcon');
+    if (defaultIcon === null){
+      await AsyncStorage.setItem('defaultIcon', 'question');
+      return 'question';
+    }
+    return defaultIcon;
+  }
+
+  //Settings setters
+  async function setNotificationsOn(){
+    return false; //not implemented
+  }
+  async function setDefaultIcon(){
+
+  }
+
   
   
   // Runs on app launch
   useEffect(() => {
-    
     setupDatabase();
-      
-
+    const loadSettings = async () => {
+      const {notificationsOn, defaultIcon} = await getSettings();
+    }
+    loadSettings();
+    
     NavigationBar.setPositionAsync("absolute");
     NavigationBar.setBackgroundColorAsync("transparent");
   }, []); // runs once
@@ -98,11 +128,11 @@ export default function Layout() {
       <ThemeProvider>
         <Stack screenOptions={{ headerShown: false }}>
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen name="Profile" options={{ presentation: "transparentModal", title: 'Profile' }} />
+          <Stack.Screen name="Account/Profile" options={{ presentation: "transparentModal", title: 'Profile' }} />
           <Stack.Screen name="newTrackerView" options={{ presentation: "transparentModal", title: "New Tracker" }} />
-          <Stack.Screen name="userLoggedIn" options={{ presentation: "transparentModal", title: "User Logged In" }} />
+          <Stack.Screen name="Contexts/userLoggedIn" options={{ presentation: "transparentModal", title: "User Logged In" }} />
           <Stack.Screen name="selectImage" options={{ presentation: "transparentModal", title: "Select Image" }} />
-          <Stack.Screen name="ForgotPassword" options={{ presentation: "transparentModal", title: "Forgot Password" }} />
+          <Stack.Screen name="Account/ForgotPassword" options={{ presentation: "transparentModal", title: "Forgot Password" }} />
           
         </Stack>
       </ThemeProvider>

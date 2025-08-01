@@ -1,10 +1,10 @@
 import { Modal, StyleSheet, Alert } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useTheme } from "./ThemeContext";
+import { useTheme } from "./Contexts/ThemeContext";
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { IconItem, isUri} from "./newTrackerView";
 import { useState } from "react";
-import { getImage } from "./trackerList";
+import { getImage } from "./Settings/trackerList";
 import { Dimensions, PixelRatio } from "react-native";
 import { View, Pressable,Image, Text , ScrollView} from "react-native";
 import { Ionicons, MaterialCommunityIcons,Entypo } from "@expo/vector-icons";

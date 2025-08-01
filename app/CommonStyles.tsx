@@ -1,12 +1,12 @@
 import { StyleSheet, Dimensions, PixelRatio } from 'react-native';
-import { useTheme } from './ThemeContext';
+import { useTheme } from './Contexts/ThemeContext';
 import { useMemo } from 'react';
 
 const width = Dimensions.get('window').width-1
 
 
 export const CommonStyles = () => {
-    const { currentTheme } = useTheme();
+    const { currentTheme, isDarkMode } = useTheme();
     const scale = PixelRatio.get();
 
     return useMemo(() => StyleSheet.create({       // useMemo to memorise styles to improve performance (dont have to recompute them every time since its now a function)
@@ -27,11 +27,11 @@ export const CommonStyles = () => {
       container: {
         width: width*0.85,                             // if you add height: it breaks messes up proportions
         backgroundColor: currentTheme["101010"],
-        paddingHorizontal: 20,
-        paddingVertical: 50,
+        paddingHorizontal: isDarkMode ? 20 : 18,
+        paddingVertical: isDarkMode ? 50 : 48,
         borderRadius: 15, 
-        borderWidth: 1,
-        borderColor: currentTheme.dimgray,
+        borderWidth: isDarkMode ? 1 : 3,
+        borderColor: isDarkMode ? 'dimgray' : '#666666',
         alignItems: "center",
         justifyContent: 'center',
         //justifyContent: "flex-start",
@@ -39,7 +39,7 @@ export const CommonStyles = () => {
   
       header: {
         fontSize: 18,
-        color: currentTheme.white,
+        color: 'white',
         fontWeight: 'bold',
         textAlign: 'center',
         marginBottom: 10, 
@@ -47,9 +47,9 @@ export const CommonStyles = () => {
   
       input: {
         width: '82%',
-        padding: 12,
+        padding:isDarkMode ? 12 : 10,
         marginTop: 14,
-        borderWidth: 1,
+        borderWidth: isDarkMode ? 1 : 3,
         borderRadius: 5,
         borderColor: currentTheme.dimgray,
         color: currentTheme.white,
@@ -65,10 +65,10 @@ export const CommonStyles = () => {
         marginTop: 20,
         marginBottom: 20,
         backgroundColor: currentTheme["101010"],
-        paddingVertical: 12,
-        paddingHorizontal: 30,
+        paddingVertical: isDarkMode ? 12 : 10,
+        paddingHorizontal: isDarkMode ? 30 : 28,
         borderRadius: 25,
-        borderWidth: 1,
+        borderWidth: isDarkMode ? 1 : 3,
         borderColor: currentTheme.dimgray,
       },
     
@@ -95,9 +95,9 @@ export const CommonStyles = () => {
             height: 410,
             width: width*0.85,
             backgroundColor: currentTheme["101010"],
-            paddingHorizontal: 20,
+            paddingHorizontal: isDarkMode ? 20 : 18,
             borderRadius: 15, // Rounded edges
-            borderWidth: 1,
+            borderWidth: isDarkMode ? 1 : 3,
             borderColor: currentTheme.dimgray,
             alignItems: "center",
           },
@@ -108,7 +108,7 @@ export const CommonStyles = () => {
         borderColor: currentTheme.dimgray,
         marginBottom: 5,
         borderRadius: 5,
-        borderWidth: 1,
+        borderWidth: isDarkMode ? 1 : 3,
         
         alignSelf: 'center',
       },
@@ -124,9 +124,9 @@ export const CommonStyles = () => {
             // Dropdown styling
             dropdownContainer: {
               width: width*0.8*0.85,
-              marginBottom: 10,
+              marginBottom: isDarkMode ? 10 : 8,
               borderRadius: 5,
-              borderWidth: 1,
+              borderWidth: isDarkMode ? 1 : 3,
               borderColor: currentTheme.dimgray,
               zIndex: 1000, 
               alignSelf: 'center',
@@ -169,7 +169,7 @@ export const CommonStyles = () => {
               flex: 1,
               backgroundColor: currentTheme.black,
               borderRadius: 5,
-              borderWidth: 2,
+              borderWidth: isDarkMode ? 2 : 3,
               borderColor: currentTheme.dimgray,
           
               alignItems: 'center',
@@ -184,7 +184,7 @@ export const CommonStyles = () => {
               backgroundColor: currentTheme.black,
           
               borderRadius: 5,
-              borderWidth: 2,
+              borderWidth: isDarkMode ? 2 : 3,
               borderColor: currentTheme.dimgray,
           
               fontSize: 20,
@@ -194,10 +194,10 @@ export const CommonStyles = () => {
           
             // Color of goalLimit button dependent on {goal or limit}
             goalButton: {
-              backgroundColor: "#06402B",
+              backgroundColor: currentTheme["06402B"],
             },
             limitButton: {
-              backgroundColor: "#950606",
+              backgroundColor: currentTheme["950606"],
             },
           
             //Text if goal or limit {otherwise buttonText}
@@ -285,7 +285,7 @@ export const CommonStyles = () => {
           width: 100,
           height: '100%',
           borderColor: currentTheme.dimgray,
-          borderWidth: 1,
+          borderWidth: isDarkMode ? 1 : 3,
           justifyContent: 'center',
           alignContent: 'center',
       

@@ -1,7 +1,7 @@
 import { Tabs } from "expo-router";
-import { ThemeProvider } from "../ThemeContext";
+import { ThemeProvider } from "../Contexts/ThemeContext";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { useTheme } from "../ThemeContext"; // Import the ThemeContext
+import { useTheme } from "../Contexts/ThemeContext"; // Import the ThemeContext
 
 export default function TabLayout() {
   const { currentTheme } = useTheme(); // Access the current theme from ThemeContext

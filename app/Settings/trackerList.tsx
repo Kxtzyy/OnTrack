@@ -1,7 +1,7 @@
 import { Image, View, ScrollView } from "react-native";
 import { Pressable, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useTheme } from "./ThemeContext";
+import { useTheme } from "../Contexts/ThemeContext";
 import { useTrackerStore } from "@/storage/store";
 import { Tracker } from "@/types/Tracker";
 import { FontAwesome5 } from "@expo/vector-icons";
@@ -16,7 +16,7 @@ import { useFocusEffect } from '@react-navigation/native';
 export const getImage = ( inputTracker: Tracker, size: number, forcedColor?: string ): { icon: JSX.Element } => {
     const { type, name, color } = getIconInfo(inputTracker.icon);
     const iconColor = forcedColor ?? color;
-
+    //console.log("ICON COLOR TO DISPLAY: "+iconColor);
     if (type === "fa5") {
         return {
         icon: <FontAwesome5 name={name} size={size} color={iconColor} />
@@ -27,8 +27,8 @@ export const getImage = ( inputTracker: Tracker, size: number, forcedColor?: str
             <Image
             style={{
                 aspectRatio: 1,
-                height: 60,
-                width: 60,
+                height: 50,
+                width: 50,
                 marginLeft: 1,
                 marginTop: 1,
             }}
@@ -43,10 +43,20 @@ export const getImage = ( inputTracker: Tracker, size: number, forcedColor?: str
 };
 
 /* function to render a pressable for an input tracker */
-const renderTracker = ({ tracker, router, currentTheme }: { tracker: Tracker; router: ReturnType<typeof useRouter>; currentTheme: any;}) => {
+const renderTracker = ({ tracker, router, currentTheme, isDarkMode }: { tracker: Tracker; router: ReturnType<typeof useRouter>; currentTheme: any; isDarkMode: any}) => {
+    const color = getIconInfo(tracker.icon).color;
+    const defaultColor : boolean = color === '#FFFFFF' || color === '#000000' || color == 'white' || color == 'black' || color === '#ffffff';
     return (
         <TouchableOpacity
-        onPress={() => router.push({ pathname: "./editTracker", params: { trackerN: tracker.trackerName, timeP: tracker.timePeriod, color: getIconInfo(tracker.icon).color, image: getIconInfo(tracker.icon).name} })}
+        onPress={() => router.push({ pathname: "../editTracker", params: {
+            trackerN: tracker.trackerName,
+            timeP: tracker.timePeriod,
+            color: defaultColor //default color
+            ? (isDarkMode
+              ? '#FFFFFF' //dark mode (fill with white)
+              : '#000000') //light mode (fill with black)
+            : color, //not default color,
+            image: getIconInfo(tracker.icon).name} })}
         key = {tracker.trackerName}
         style = {[
             styles.trackerButton,
@@ -54,7 +64,13 @@ const renderTracker = ({ tracker, router, currentTheme }: { tracker: Tracker; ro
         ]}>
             {/*icon*/}
             <View style = {[styles.iconContainer]}>
-                {getImage(tracker,40).icon}
+                {getImage(tracker,40,
+                    defaultColor //if a default color render according to theme
+                    ? (isDarkMode
+                      ? '#FFFFFF'
+                      : '#000000')
+                    : undefined,
+                ).icon}
             </View>
             
             {/*text {trackername}*/}
@@ -79,7 +95,7 @@ const renderTracker = ({ tracker, router, currentTheme }: { tracker: Tracker; ro
 };
 
 export default function trackerList(){
-    const { currentTheme } = useTheme();
+    const { currentTheme, isDarkMode } = useTheme();
     const router = useRouter();
     const params = useLocalSearchParams();
     
@@ -119,7 +135,6 @@ export default function trackerList(){
                     paddingHorizontal: 16,
                     paddingVertical: 8,
                     borderRadius: 10,
-                    
                     }}
                     onPress={() => setSelected(btn)}
                 >
@@ -139,9 +154,9 @@ export default function trackerList(){
                 style = {[
                     styles.scrollView,
                 ]}>
-                    {(selected === 'Daily') ? trackersDaily.map((tracker) => renderTracker({ tracker, router, currentTheme })) 
-                    :((selected === 'Weekly') ? trackersWeekly.map((tracker) => renderTracker({ tracker, router, currentTheme }))
-                        : trackersMonthly.map((tracker) => renderTracker({tracker, router, currentTheme}))
+                    {(selected === 'Daily') ? trackersDaily.map((tracker) => renderTracker({ tracker, router, currentTheme, isDarkMode })) 
+                    :((selected === 'Weekly') ? trackersWeekly.map((tracker) => renderTracker({ tracker, router, currentTheme, isDarkMode }))
+                        : trackersMonthly.map((tracker) => renderTracker({tracker, router, currentTheme, isDarkMode}))
                     )} 
             </ScrollView>
         </SafeAreaView>

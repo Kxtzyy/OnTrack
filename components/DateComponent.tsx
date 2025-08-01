@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import moment from 'moment';
 import React from 'react';
-import { useTheme } from '../app/ThemeContext'; // Import useTheme
+import { useTheme } from '../app/Contexts/ThemeContext'; // Import useTheme
 
 // Define the prop types for the Date component
 interface DateComponentProps {

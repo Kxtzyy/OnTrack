@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Pressable, StyleSheet, SafeAreaView, Dimensions, Alert } from 'react-native';
 import { useRouter } from 'expo-router';
-import { useTheme } from './ThemeContext';
-import { supabase } from '../storage/supabase';  
-import { CommonStyles } from './CommonStyles';
+import { useTheme } from '../Contexts/ThemeContext';
+import { supabase } from '../../storage/supabase';  
+import { CommonStyles } from '../CommonStyles';
 
 const width = Dimensions.get('window').width - 1;
 

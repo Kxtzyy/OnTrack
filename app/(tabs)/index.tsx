@@ -8,16 +8,17 @@ import { MaterialCommunityIcons, AntDesign, Entypo, Feather } from "@expo/vector
 import { useRouter } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import * as Progress from "react-native-progress";
-import { useTheme } from "../ThemeContext"; // Import the ThemeContext
+import { useTheme } from "../Contexts/ThemeContext"; // Import the ThemeContext
 import { useEffect, useState, useRef, useMemo } from "react";
 import { Section } from "@/types/Section";
 import { useTrackerStore } from "@/storage/store"; // Import the Zustand store
-import { getImage } from "../trackerList"; // Import the getImage function
+import { getImage } from "../Settings/trackerList"; // Import the getImage function
 import { CalendarProps } from "../../components/CalendarComponent";
 import NewSectionModal from "@/components/SectionModal";
 import { getIconInfo } from "@/types/Misc";
 import { useSectionStore } from "@/storage/store";
-import { useAuth } from '@/app/LoginContext';
+import { useAuth } from '@/app/Contexts/LoginContext';
+import { colorKit } from "reanimated-color-picker";
 
 // Helper function (same as one in Calendar.tsx)
 const hexToRgba = (hex: string, alpha: number): string => {
@@ -28,6 +29,7 @@ const hexToRgba = (hex: string, alpha: number): string => {
     const b = bigint & 255;
     return `rgba(${r},${g},${b},${alpha})`;
 };
+
 
 
 // Screen constants
@@ -45,7 +47,7 @@ const marginBetweenSections = 15;
 
 export default function Index() {
   const router = useRouter();
-  const { currentTheme } = useTheme(); // Get the current theme from context
+  const { currentTheme, isDarkMode} = useTheme(); // Get the current theme from context
   
   // Backend structures
   const trackers = useTrackerStore((state) => state.trackers);
@@ -511,9 +513,9 @@ export default function Index() {
         {/* Profile button */}
         <Pressable
           onPress={() => {if (user === null){
-            router.push("/Profile")} 
+            router.push("./Account/Profile")} 
           else{
-            router.push("/userLoggedIn")
+            router.push("./Contexts/userLoggedIn")
           }
         }}
           style={[ { backgroundColor: currentTheme["101010"], height: '100%', aspectRatio: 1, justifyContent: 'center', alignItems: 'center'}]}
@@ -665,7 +667,7 @@ export default function Index() {
             style = {
               [
                 pan.getLayout(), // Layout stored in ref
-                {borderWidth: 1,
+                {borderWidth: isDarkMode ? 1 : 2,
                   borderRadius: 8,
                   borderColor: editMode ? currentTheme["dimgray"] : 'transparent',
                   marginTop: section.position === 0 ? 20 : 15, // num1 from circl (1st section), num2 from other sections
@@ -745,20 +747,24 @@ export default function Index() {
                         onPress={() => {
                             if (!editMode) { // Don’t increment in edit mode
                             incrementTracker(tracker.trackerName, tracker.timePeriod);
-                            }else{
-
                             }
                         }}
                         // Hold press opens edit tracker
                         onLongPress={() => {
                           if(!editMode){
+                            const color = getIconInfo(tracker.icon).color;
+                            const defaultColor : boolean = color === '#FFFFFF' || color === '#000000' || color == 'white' || color == 'black' || color === '#ffffff';
                             router.push({
                             pathname: "/editTracker",
                             params: {
                                 trackerN: tracker.trackerName,
-                                timeP:    tracker.timePeriod,
-                                color:    (getIconInfo(tracker.icon).color == '#ffffff' || getIconInfo(tracker.icon).color == '#000000') ? currentTheme['defaultIcon'] : getIconInfo(tracker.icon).color,
-                                image:    getIconInfo(tracker.icon).name,
+                                timeP: tracker.timePeriod,
+                                color: defaultColor //default color
+                                ? (isDarkMode
+                                  ? '#FFFFFF' //dark mode (fill with white)
+                                  : '#000000') //light mode (fill with black)
+                                : color, //not default color
+                                image: getIconInfo(tracker.icon).name,
                             },
                             });
                           }
@@ -766,6 +772,7 @@ export default function Index() {
                     style={[
                       squareIconButtonStyle(itemSize),
                       {
+                        borderWidth: isDarkMode ? 1 : 2,
                         borderColor: editMode ? currentTheme.dimgray : currentTheme.dimgray,
                         backgroundColor: hexToRgba( 
                             // Set to 0 for transparency                          
@@ -777,26 +784,41 @@ export default function Index() {
                     {(() => {  
                       // Create a view filining up the icon according to percentage currentAmount to bound                                              
                       const bound = tracker.bound ?? 0;                   
-                      const progress = bound !== 0 ? Math.min(1, tracker.currentAmount / Math.abs(bound)) : 0;                                              
-                      return (        
-                                                         
-                        <View                                               
+                      const progress = bound !== 0 ? Math.min(1, tracker.currentAmount / Math.abs(bound)) : 0;    
+                      const color : string = getIconInfo(tracker.icon).color;
+                      const defaultColor : boolean = color === '#FFFFFF' || color === '#ffffff' || color === '#000000' || color == 'white' || color == 'black'; //default color
+                      console.log("Color: "+color+"|"+"Tracker: "+tracker.trackerName);                                         
+                      return (
+                        <>
+                        <View
                           style={{                                          
-                            position: "absolute",                           
-                            bottom: 0,                                         
-                            left: 0,                                        
-                            right: 0,                                       
-                            height: `${progress * 100}%`,                   
-                            backgroundColor: hexToRgba(     
-                                // Set to 0.15 for filling up icon               
-                                (getIconInfo(tracker.icon).color == '#ffffff' || getIconInfo(tracker.icon).color == '#000000') ? currentTheme['defaultIcon'] : getIconInfo(tracker.icon).color, 0.15   
-                            ),                                              
-                          }}                                                
-                        />                                                  
-                      );                                                   
-                    })()}                                                   
-                  
-                    {getImage(tracker, 40).icon}
+                            position: "absolute",
+                            bottom: 0,
+                            left: 0,
+                            right: 0,
+                            height: `${progress * 100}%`,
+                            backgroundColor:
+                            defaultColor //default color
+                              ? (isDarkMode
+                                ? hexToRgba('#FFFFFF', 0.15) //dark mode (fill with white)
+                                : hexToRgba('#000000', 0.2)) //light mode (fill with black)
+                              : (isDarkMode //not default colour
+                                ? hexToRgba(color, 0.15) //dark mode (less opacity)
+                                : hexToRgba(color, 0.3)) //light mode
+                          }}
+                        />
+                          {getImage( //icon component
+                            tracker,
+                            40,
+                            defaultColor //default color
+                            ? (isDarkMode
+                                ? '#FFFFFF'
+                                : '#000000'
+                            ) : color
+                          ).icon}
+                        </>
+                      );
+                    })()}
                   </Pressable>
                   {/* Delete tracker from section button */}
                   {editMode &&(
@@ -832,10 +854,10 @@ export default function Index() {
                     setTargetSection(section); // Store section for trackers to be added to
                     setIsModalVisible(true); // Show modal
                   }}
-                  style={
-                    squareIconButtonStyle(itemSize)
-                    
-                  }
+                  style={[
+                    squareIconButtonStyle(itemSize),
+                    {borderWidth: isDarkMode ? 1 : 2}
+                  ]}
                 >
                   <AntDesign name="plus" size={30} color={currentTheme.white} />
                 </Pressable>
@@ -849,7 +871,10 @@ export default function Index() {
         {/* END dynamic sections rendering */}
 
         <Pressable //section creation
-          style={[styles.sectionCreateButton, { borderColor: currentTheme.dimgray }]}
+          style={[styles.sectionCreateButton, {
+          borderColor: currentTheme.dimgray,
+           borderWidth: isDarkMode ? 1 : 2
+          }]}
           onPress={() => setSectionModalOpen(true)}
         >
           <AntDesign name="plus" size={50} color={currentTheme.white} />
@@ -881,54 +906,62 @@ export default function Index() {
               >
                 {trackers
                 .filter((tracker) => tracker.timePeriod === selected)
-                .map((tracker) => (
-                  <TouchableOpacity
-                    onPress={() => {
-                      if (!targetSection) return;
-                      const exists = targetSection.trackers.some( // Whether tracker already exists in section
-                        (t) => t.trackerName === tracker.trackerName && t.timePeriod === tracker.timePeriod
-                      );
-                      if (exists) {
+                .map((tracker) => {
+                  const color = getIconInfo(tracker.icon).color;
+                  const defaultColor : boolean = color === '#FFFFFF' || color === '#000000' || color === 'white' || color === 'black' || color === '#ffffff'; //default color
+                  return(
+                    <TouchableOpacity
+                      onPress={() => {
+                        if (!targetSection) return;
+                        const exists = targetSection.trackers.some( // Whether tracker already exists in section
+                          (t) => t.trackerName === tracker.trackerName && t.timePeriod === tracker.timePeriod
+                        );
+                        if (exists) {
+                          handleCloseModal();
+                          return;
+                        }else{
+                          addTrackerToSection(
+                            targetSection.sectionTitle,
+                            targetSection.timePeriod,
+                            tracker
+                        );
                         handleCloseModal();
-                        return;
-                      }else{
-                        addTrackerToSection(
-                          targetSection.sectionTitle,
-                          targetSection.timePeriod,
-                          tracker
-                      );
-                      handleCloseModal();
-                      }}
-                    }
-                    key = {tracker.trackerName}
-                    style = {[
-                        styles.trackerButton,
-                        {borderColor: 'transparent'}, 
-                    ]}>
-                      {/* Icon */}
-                      <View style = {[styles.iconContainer]}>
-                          {getImage(tracker,40).icon}
-                      </View>
-                      
-                      {/* Text (tracker name) */}
-                      <Text style={[
-                          styles.trackerText,
-                          {color: currentTheme['white']}
-                      ]}>
-                          {tracker.trackerName}
-                      </Text>
-
-                      {/* Plus */}
-                      <View style = {[
-                      styles.iconContainer,
-                      {
-                          marginLeft: 'auto', 
+                        }}
                       }
+                      key = {tracker.trackerName}
+                      style = {[
+                          styles.trackerButton,
+                          {borderColor: 'transparent'}, 
                       ]}>
-                        <Entypo name="plus" size={25} color={currentTheme['dimgray']} />
-                      </View>
-                  </TouchableOpacity>
-                ))}
+                        {/* Icon */}
+                        <View style = {[styles.iconContainer]}>
+                            {
+                              defaultColor //if a default theme
+                              ? (isDarkMode ? getImage(tracker, 40, '#FFFFFF').icon : getImage(tracker, 40, '#000000').icon)
+                              : getImage(tracker,40).icon
+                            }
+                        </View>
+                        
+                        {/* Text (tracker name) */}
+                        <Text style={[
+                            styles.trackerText,
+                            {color: currentTheme['white']}
+                        ]}>
+                            {tracker.trackerName}
+                        </Text>
+
+                        {/* Plus */}
+                        <View style = {[
+                        styles.iconContainer,
+                        {
+                          marginLeft: 'auto',
+                        }
+                        ]}>
+                          <Entypo name="plus" size={25} color={currentTheme['dimgray']} />
+                        </View>
+                    </TouchableOpacity>
+                  );
+              })}
               </ScrollView>
             </View>
           </View>
@@ -938,6 +971,7 @@ export default function Index() {
         <NewSectionModal
           visible={sectionModalOpen}
           onClose={() => setSectionModalOpen(false)}
+          
         />
         </Pressable>
       </ScrollView>

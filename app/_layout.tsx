@@ -8,7 +8,6 @@ import * as Notifications from "expo-notifications";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { SQLiteDatabase } from "expo-sqlite";
 import * as SQLite from 'expo-sqlite';
-import { ThemeContext } from "@react-navigation/native";
 // Set notification handler
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -46,23 +45,15 @@ export default function Layout() {
 
   async function getSettings(){
     return{
-      theme: getTheme(),
       notificationsOn: getNotificationsOn(),
       defaultIcon: getDefaultIcon()
     }
   }
-  async function getTheme() {
-    const theme = await AsyncStorage.getItem('theme');
-    if (theme === null){
-      await AsyncStorage.setItem('theme', 'dark');
-      return 'dark';
-    }
-    return theme;
-  }
+
+  //Settings getters
   async function getNotificationsOn(){
     return false; //not implemented
   }
-
   async function getDefaultIcon(){
     const defaultIcon = await AsyncStorage.getItem('defaultIcon');
     if (defaultIcon === null){
@@ -71,10 +62,25 @@ export default function Layout() {
     }
     return defaultIcon;
   }
+
+  //Settings setters
+  async function setNotificationsOn(){
+    return false; //not implemented
+  }
+  async function setDefaultIcon(){
+
+  }
+
+  
   
   // Runs on app launch
   useEffect(() => {
     setupDatabase();
+    const loadSettings = async () => {
+      const {notificationsOn, defaultIcon} = await getSettings();
+    }
+    loadSettings();
+    
     NavigationBar.setPositionAsync("absolute");
     NavigationBar.setBackgroundColorAsync("transparent");
   }, []); // runs once

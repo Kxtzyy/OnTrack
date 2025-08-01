@@ -217,9 +217,9 @@ export default function newTrackerView() {
         </View>
 
         {/* Limit/Goal of Tracker (OPTIONAL) */}
-        <View style={commonStyles.inputContainer}>
+        <View style={[commonStyles.inputContainer]}>
         <TextInput
-          style={[commonStyles.trackerViewInput, {color: isGoal ? "#06402B" : "#950606"}]} //if goal text red otherwise green
+          style={[commonStyles.trackerViewInput, {color: isGoal ? "#06402B" : currentTheme["950606"]}]} //if goal text red otherwise green
           
           placeholder = {isGoal ? "Goal" : "Limit"}
           placeholderTextColor="#aaa"

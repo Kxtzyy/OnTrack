@@ -18,15 +18,15 @@ export default function Profile() {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [isCreating, setIsCreating] = useState(false);    // toggle between login and create account
-  const { currentTheme } = useTheme();                    // Get the current theme from context
-  const [message, setMessage] = useState('');             // to send error or success messages  
+  const [isCreating, setIsCreating] = useState(false); // toggle between login and create account
+  const { currentTheme, isDarkMode } = useTheme(); // Get the current theme from context
+  const [message, setMessage] = useState(''); // to send error or success messages  
   const { login } = useAuth();
   const { user } = useAuth();
   const commonStyles = CommonStyles();
 
-  const handleLogin = async () => {     // async so 'await' works
-    setMessage('');                     // reset message
+  const handleLogin = async () => { // async so 'await' works
+    setMessage(''); // reset message
 
     if (isCreating) {
 
@@ -35,17 +35,17 @@ export default function Profile() {
         return;
       }
 
-      const { data: existingUser, error: fetchError } = await supabase.from('Users')    // fetches data from 'Users' where email matches user input
+      const { data: existingUser, error: fetchError } = await supabase.from('Users') // fetches data from 'Users' where email matches user input
         .select('email')
         .eq('email', email);   
 
       if (fetchError) {
-        console.error(fetchError);    // logs error in console
+        console.error(fetchError); // logs error in console
         setMessage('Error checking for existing user.');
         return;
       }
 
-      if (existingUser.length > 0) {    // .length because supabase returns empty array rather than null if no existing user
+      if (existingUser.length > 0) { // .length because supabase returns empty array rather than null if no existing user
         setMessage('An account with this email already exists.');   
         return;
       }
@@ -74,7 +74,7 @@ export default function Profile() {
         return;
       }
 
-      const { data: users, error: loginError } = await supabase.from('Users')   // select all where username equals user input
+      const { data: users, error: loginError } = await supabase.from('Users') // select all where username equals user input
         .select('*')
         .eq('email', email);   
 
@@ -86,8 +86,8 @@ export default function Profile() {
 
       const hashedInputPassword = SHA256(password).toString();
 
-      if (users.length > 0 && hashedInputPassword === users[0].password) {   // must use indexing as supabase returns array
-        await login(users[0]);                                    // === is strict equality (types must match aswell)
+      if (users.length > 0 && hashedInputPassword === users[0].password) { // must use indexing as supabase returns array
+        await login(users[0]); // === is strict equality (types must match aswell)
         setMessage('Logged in successfully!');                   
         router.back();
       } else {
@@ -97,7 +97,13 @@ export default function Profile() {
   };
 
   return (
-     <View style={commonStyles.overlay}>
+     <View style={[
+      commonStyles.overlay,
+      {
+        
+      }
+      
+      ]}>
        
          {/* Header above modal */}
          <Text style={commonStyles.header}>Profile</Text>
@@ -105,6 +111,7 @@ export default function Profile() {
          {/* Modal box */}
          <SafeAreaView style={[commonStyles.container,{
           height: isCreating ? 420:370,
+
           }]}>
 
            <MaterialCommunityIcons name="account" size={80} color={currentTheme.white} />

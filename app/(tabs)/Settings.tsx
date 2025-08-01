@@ -14,15 +14,17 @@ import { Text, View, Pressable, StyleSheet, ScrollView, SafeAreaView } from "rea
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useTheme } from "../Contexts/ThemeContext"; // Import ThemeContext for theme management
 import { useRouter } from "expo-router"; // Import router for navigation
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function Index() {
-  const { isDarkMode, toggleTheme, currentTheme } = useTheme(); // Access theme and toggle function
+  const { isDarkMode, toggleTheme, currentTheme, setTheme } = useTheme(); // Access theme and toggle function
   const router = useRouter(); // Router for navigation between screens
 
   const [notificationsEnabled, setNotificationsEnabled] = useState(true); // State for notifications toggle
 
   const toggleNotifications = () => {
     setNotificationsEnabled((prev) => !prev);
+
     console.log(`Notifications ${!notificationsEnabled ? "enabled" : "disabled"}`);
     // Add logic to enable/disable notifications here
   };
@@ -128,7 +130,7 @@ export default function Index() {
     {
       title: "Display Preferences",
       description: "Icon Display | Default Icon",
-      icon: "help-circle",
+      icon: "lead-pencil",
       onPress: () => router.push("../Settings/helpSupport"), // Navigate to visual settings
     },
   ];
@@ -138,7 +140,19 @@ export default function Index() {
       {/* Main container */}
       <View style={[styles.container]}>
         {/* Theme toggle button */}
-        <Pressable style={styles.themeToggle} onPress={toggleTheme}>
+        <Pressable style={styles.themeToggle} onPress={() => {
+          (async () => {
+            console.log("THIS PART WENT THROUGH 1");
+            toggleTheme();
+            console.log("THIS PART WENT THROUGH 2");
+            isDarkMode
+            ? AsyncStorage.setItem('theme', 'light')
+            : AsyncStorage.setItem('theme', 'dark');
+            console.log("current theme in async: "+await AsyncStorage.getItem('theme') as string);
+          })();
+          
+        }
+          }>
           <MaterialCommunityIcons
             name={isDarkMode ? "weather-night" : "white-balance-sunny"} // Icon changes based on theme
             size={24}
@@ -164,6 +178,8 @@ export default function Index() {
                   backgroundColor: currentTheme["101010"],
                   borderWidth: isDarkMode ? 1 : 2,
                   borderColor: currentTheme.dimgray, // Set border color to currentTheme.dimgray
+                  paddingVertical: isDarkMode ? 15 : 14, //change paddings to account for border size change
+                  paddingHorizontal: isDarkMode ? 20 : 19
                 },
               ]}
               onPress={item.onPress} // Navigate or perform action on press
@@ -185,18 +201,22 @@ export default function Index() {
           ))}
 
           {/* Notifications Toggle */}
+          {/*
           <View style={styles.toggleContainer}>
             <MaterialCommunityIcons
               name={notificationsEnabled ? "bell-ring" : "bell-off"}
               size={24}
               color={currentTheme.white}
             />
+            
             <Pressable onPress={toggleNotifications}>
               <Text style={styles.toggleText}>
                 {notificationsEnabled ? "Disable Notifications" : "Enable Notifications"}
               </Text>
             </Pressable>
+            
           </View>
+          */}
         </ScrollView>
       </View>
     </SafeAreaView>

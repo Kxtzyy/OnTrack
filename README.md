@@ -1,50 +1,77 @@
-# Welcome to your Expo app 👋
+# OnTrack
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+OnTrack is a cross-platform habit and activity tracker built with Expo, React Native, and TypeScript. It is designed around fast daily logging, flexible tracker customisation, local-first persistence, and optional cloud backup.
 
-## Get started
+## Features
 
-1. Install dependencies
+- Create custom trackers with titles, goals or limits, units, icons, colours, and uploaded images.
+- Organise trackers into Daily, Weekly, and Monthly sections.
+- Log progress from the home screen with one-tap tracker updates.
+- Review current and historical progress through calendar-based views.
+- Persist data locally with SQLite and hydrate UI state through Zustand.
+- Back up and restore tracker data through Supabase.
+- Switch between light and dark themes stored with AsyncStorage.
 
-   ```bash
-   npm install
-   ```
+## Tech Stack
 
-2. Start the app
+- **App:** Expo, React Native, Expo Router, TypeScript
+- **State:** Zustand, React Context
+- **Storage:** Expo SQLite, AsyncStorage
+- **Cloud:** Supabase
+- **UI:** React Native components, Expo Vector Icons, React Native Reanimated colour picker
+- **Device APIs:** Expo Image Picker, Expo Notifications, Expo Navigation Bar
 
-   ```bash
-    npx expo start
-   ```
+## Architecture
 
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
+```text
+app/
+  (tabs)/              Main Home, Calendar, and Settings tabs
+  Account/             Login, password, and email screens
+  Contexts/            Theme and authentication providers
+  Settings/            Backup, account, tracker list, and support screens
+  newTrackerView.tsx   Tracker creation flow
+  editTracker.tsx      Tracker editing flow
+  selectImage.tsx      Icon, colour, and image picker flow
+components/            Shared calendar, section modal, and hydration logic
+storage/               SQLite, Supabase, and Zustand store layer
+types/                 Tracker and section domain models
+assets/app.db          Seed SQLite database schema
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+The app follows a local-first model: SQLite is the source of persisted device data, Zustand holds the live in-memory view model, and Supabase is used for account-based backup and restore.
 
-## Learn more
+## Getting Started
 
-To learn more about developing your project with Expo, look at the following resources:
+### Prerequisites
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+- Node.js
+- npm
+- Expo Go, an iOS Simulator, or an Android Emulator
 
-## Join the community
+### Installation
 
-Join our community of developers creating universal apps.
+```bash
+npm install
+npx expo start
+```
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+From the Expo terminal UI, open the app in Expo Go, iOS, Android, or web.
+
+## Scripts
+
+```bash
+npm start        # Start the Expo development server
+npm run ios      # Start Expo and open iOS
+npm run android  # Start Expo and open Android
+npm run web      # Start Expo for web
+npm test         # Start Jest in watch mode
+npx tsc --noEmit # Type-check the project
+```
+
+## Configuration
+
+Expo configuration lives in `app.json`, with EAS build profiles in `eas.json`. Supabase connection details are currently defined in `storage/supabase.ts`; replace them with your own project values before running cloud backup or restore against a different backend.
+
+## Development Notes
+
+This project demonstrates mobile product engineering across navigation, persistent storage, state hydration, calendar-based history, custom tracker creation, theming, and cloud sync. For a production release, the next priorities would be moving cloud credentials into environment configuration, expanding automated test coverage, and hardening authentication around Supabase Auth.
